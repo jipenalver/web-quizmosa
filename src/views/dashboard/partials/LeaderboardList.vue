@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { LeaderboardRow } from '@/stores/types'
+import type { LeaderboardRow } from '@/types/dashboard'
 
 const props = withDefaults(
   defineProps<{

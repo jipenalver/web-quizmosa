@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LeaderboardRow } from '@/stores/types'
+import type { LeaderboardRow } from '@/types/dashboard'
 
 defineProps<{
   result: LeaderboardRow | undefined

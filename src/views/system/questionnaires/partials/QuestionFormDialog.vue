@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRules } from 'vuetify'
 import QuestionImage from '@/components/common/QuestionImage.vue'
-import type { QuestionWithKey } from '@/stores/types'
+import type { QuestionWithKey } from '@/types/questionnaires'
 import {
   choiceKeys,
   imageMaxBytes,

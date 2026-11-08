@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useDeleteQuestionnaire, useQuestionnairesQuery } from '@/stores/questionnaires'
-import type { QuestionnaireWithCounts } from '@/stores/types'
+import type { QuestionnaireWithCounts } from '@/types/questionnaires'
 import { handleFormError } from '@/utils/helpers/forms'
 
 export function useQuestionnairesView() {

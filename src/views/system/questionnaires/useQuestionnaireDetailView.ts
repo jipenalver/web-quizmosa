@@ -6,7 +6,7 @@ import {
   useQuestionsQuery,
   useReorderQuestions,
 } from '@/stores/questionnaires'
-import type { QuestionWithKey } from '@/stores/types'
+import type { QuestionWithKey } from '@/types/questionnaires'
 import { handleFormError } from '@/utils/helpers/forms'
 
 export function useQuestionnaireDetailView() {

@@ -2,14 +2,9 @@ import { computed, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { queryClient } from '@/utils/queryClient'
 import { supabase } from '@/utils/supabase'
-import type {
-  ChoiceKey,
-  LeaderboardRow,
-  PlayParticipant,
-  PlayQuestion,
-  PlayReveal,
-  PlaySession,
-} from './types'
+import type { ChoiceKey } from '@/types/common'
+import type { LeaderboardRow } from '@/types/dashboard'
+import type { PlayParticipant, PlayQuestion, PlayReveal, PlaySession } from '@/types/play'
 
 export const playKeys = {
   session: (code: string) => ['play', code, 'session'] as const,

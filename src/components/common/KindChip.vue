@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { QuestionnaireKind } from '@/stores/types'
+import type { QuestionnaireKind } from '@/types/common'
 import { kindColors, kindLabels } from '@/utils/helpers/constants'
 
 defineProps<{ kind: QuestionnaireKind }>()
