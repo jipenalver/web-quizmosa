@@ -79,6 +79,17 @@ export function useQuestionnaireDetailView() {
     }
   }
 
+  const onShuffle = () => {
+    const list = [...orderedQuestions.value]
+    // Fisher-Yates, so every order is equally likely.
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[list[i], list[j]] = [list[j]!, list[i]!]
+    }
+    orderedQuestions.value = list
+    onReorder()
+  }
+
   // Expose State and Actions
   return {
     questionnaireId,
@@ -98,5 +109,6 @@ export function useQuestionnaireDetailView() {
     onAskDelete,
     onConfirmDelete,
     onReorder,
+    onShuffle,
   }
 }

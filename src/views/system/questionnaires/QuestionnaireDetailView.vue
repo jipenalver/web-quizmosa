@@ -29,6 +29,7 @@ const {
   onAskDelete,
   onConfirmDelete,
   onReorder,
+  onShuffle,
 } = useQuestionnaireDetailView()
 
 const { data: questionnaire } = questionnaireQuery
@@ -55,11 +56,26 @@ const choiceText = (question: QuestionWithKey, key: (typeof choiceKeys)[number])
         </div>
       </div>
 
-      <div class="d-flex ga-2">
-        <v-btn prepend-icon="mdi-code-json" variant="tonal" @click="isImportOpen = true">
-          Import JSON
-        </v-btn>
-        <v-btn color="primary" prepend-icon="mdi-plus" @click="onCreate">New question</v-btn>
+      <div>
+        <div class="d-flex ga-2">
+          <v-btn prepend-icon="mdi-code-json" variant="tonal" @click="isImportOpen = true">
+            Import JSON
+          </v-btn>
+          <v-btn color="primary" prepend-icon="mdi-plus" @click="onCreate">New question</v-btn>
+        </div>
+
+        <div class="d-flex justify-end mt-6">
+          <v-btn
+            :disabled="orderedQuestions.length < 2"
+            :loading="reorderQuestions.isPending.value"
+            prepend-icon="mdi-shuffle-variant"
+            size="small"
+            variant="tonal"
+            @click="onShuffle"
+          >
+            Shuffle
+          </v-btn>
+        </div>
       </div>
     </div>
 
