@@ -2,7 +2,8 @@ import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { supabase } from '@/utils/supabase'
 import { sessionKeys } from './sessions'
-import type { ChoiceKey, HistoryRow, LeaderboardRow, ParticipantOverviewRow } from './types'
+import type { ChoiceKey } from '@/types/common'
+import type { HistoryRow, LeaderboardRow, ParticipantOverviewRow } from '@/types/dashboard'
 
 export function useLeaderboardQuery(sessionId: number) {
   return useQuery({

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRules } from 'vuetify'
-import type { QuestionnaireWithCounts } from '@/stores/types'
+import type { QuestionnaireWithCounts } from '@/types/questionnaires'
 import { kindOptions, secondsMax, secondsMin } from '@/utils/helpers/constants'
 import { useQuestionnaireFormDialog } from './useQuestionnaireFormDialog'
 

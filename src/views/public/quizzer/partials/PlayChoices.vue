@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ChoiceKey, PlayQuestion } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
+import type { PlayQuestion } from '@/types/play'
 import { questionChoices } from '@/utils/helpers/questions'
 
 const props = defineProps<{

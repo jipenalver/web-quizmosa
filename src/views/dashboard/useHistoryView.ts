@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { useHistoryQuery } from '@/stores/dashboard'
 import { useSessionsQuery } from '@/stores/sessions'
-import type { QuestionnaireKind } from '@/stores/types'
+import type { QuestionnaireKind } from '@/types/common'
 
 export function useHistoryView() {
   const historyQuery = useHistoryQuery()

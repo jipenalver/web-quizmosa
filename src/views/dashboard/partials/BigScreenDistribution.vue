@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ChoiceKey } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
 
 const props = defineProps<{
   choices: { key: ChoiceKey; text: string }[]

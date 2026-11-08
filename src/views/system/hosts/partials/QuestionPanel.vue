@@ -2,7 +2,8 @@
 import { computed } from 'vue'
 import CountdownRing from '@/components/common/CountdownRing.vue'
 import QuestionImage from '@/components/common/QuestionImage.vue'
-import type { QuestionWithKey, SessionStatus } from '@/stores/types'
+import type { SessionStatus } from '@/types/common'
+import type { QuestionWithKey } from '@/types/questionnaires'
 
 const props = defineProps<{
   question: QuestionWithKey

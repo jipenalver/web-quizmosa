@@ -3,13 +3,8 @@ import { useMutation, useQuery, type QueryKey } from '@tanstack/vue-query'
 import { queryClient } from '@/utils/queryClient'
 import { supabase } from '@/utils/supabase'
 import { questionnaireKeys } from './questionnaires'
-import type {
-  HostSession,
-  HostSessionWithCounts,
-  Participant,
-  QuestionWithKey,
-  SessionReport,
-} from './types'
+import type { QuestionWithKey } from '@/types/questionnaires'
+import type { HostSession, HostSessionWithCounts, Participant, SessionReport } from '@/types/sessions'
 
 export const sessionKeys = {
   all: ['sessions'] as const,

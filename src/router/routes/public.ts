@@ -1,11 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
-import HomeView from '@/views/public/landing/HomeView.vue'
 
 export const publicRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'Home',
-    component: HomeView,
+    component: () => import('@/views/public/landing/HomeView.vue'),
   },
   {
     path: '/login',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import QueryState from '@/components/common/QueryState.vue'
-import type { Participant } from '@/stores/types'
+import type { Participant } from '@/types/sessions'
 
 const props = defineProps<{
   participants: Participant[]

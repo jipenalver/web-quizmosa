@@ -1,7 +1,8 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import type { VForm } from 'vuetify/components'
 import { useSaveQuestion } from '@/stores/questionnaires'
-import type { ChoiceKey, QuestionWithKey } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
+import type { QuestionWithKey } from '@/types/questionnaires'
 import { choiceKeys, formActionDefault, pointsDefault } from '@/utils/helpers/constants'
 import { handleFormError } from '@/utils/helpers/forms'
 

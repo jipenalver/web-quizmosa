@@ -1,7 +1,8 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import type { VForm } from 'vuetify/components'
 import { useSaveQuestionnaire } from '@/stores/questionnaires'
-import type { QuestionnaireKind, QuestionnaireWithCounts } from '@/stores/types'
+import type { QuestionnaireKind } from '@/types/common'
+import type { QuestionnaireWithCounts } from '@/types/questionnaires'
 import { formActionDefault } from '@/utils/helpers/constants'
 import { handleFormError } from '@/utils/helpers/forms'
 

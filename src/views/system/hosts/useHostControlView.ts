@@ -13,7 +13,7 @@ import {
   useSessionReportQuery,
   useStartQuestion,
 } from '@/stores/sessions'
-import type { Participant } from '@/stores/types'
+import type { Participant } from '@/types/sessions'
 import { handleFormError } from '@/utils/helpers/forms'
 
 export function useHostControlView() {

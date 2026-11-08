@@ -41,6 +41,7 @@ __screenshots__/
 # Misc
 .claude
 .mcp.json
+.playwright-mcp
 CLAUDE.md
 docs
 

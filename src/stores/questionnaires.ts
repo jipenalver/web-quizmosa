@@ -2,13 +2,7 @@ import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { queryClient } from '@/utils/queryClient'
 import { supabase } from '@/utils/supabase'
-import type {
-  QuestionImportRow,
-  QuestionInput,
-  QuestionnaireInput,
-  QuestionnaireWithCounts,
-  QuestionWithKey,
-} from './types'
+import type { QuestionImportRow, QuestionInput, QuestionnaireInput, QuestionnaireWithCounts, QuestionWithKey } from '@/types/questionnaires'
 
 const imageBucket = 'questions'
 const signedUrlSeconds = 3600

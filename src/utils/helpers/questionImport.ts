@@ -1,15 +1,6 @@
-import type { ChoiceKey, QuestionImportRow } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
+import type { ImportPreviewRow } from '@/types/questionnaires'
 import { choiceKeys, secondsMax, secondsMin } from './constants'
-
-export type ImportPreviewRow = {
-  rowNumber: number
-  prompt: string
-  answer: string
-  points: number | null
-  seconds: number | null
-  errors: string[]
-  value: QuestionImportRow | null
-}
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)

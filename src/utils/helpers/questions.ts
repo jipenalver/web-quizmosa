@@ -1,4 +1,5 @@
-import type { ChoiceKey, PlayQuestion } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
+import type { PlayQuestion } from '@/types/play'
 import { choiceKeys } from './constants'
 
 type ChoiceColumns = Pick<PlayQuestion, 'choice_a' | 'choice_b' | 'choice_c' | 'choice_d'>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SessionStatus } from '@/stores/types'
+import type { SessionStatus } from '@/types/common'
 import { statusColors, statusLabels } from '@/utils/helpers/constants'
 
 defineProps<{ status: SessionStatus }>()

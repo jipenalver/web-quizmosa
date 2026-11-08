@@ -11,7 +11,7 @@ import {
   useSubmitAnswer,
 } from '@/stores/quizzers'
 import { useCountdown } from '@/stores/sessions'
-import type { ChoiceKey } from '@/stores/types'
+import type { ChoiceKey } from '@/types/common'
 import { handleFormError } from '@/utils/helpers/forms'
 
 export function usePlayView() {

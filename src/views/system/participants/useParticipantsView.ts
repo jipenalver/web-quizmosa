@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { useParticipantsOverviewQuery } from '@/stores/dashboard'
-import type { QuestionnaireKind } from '@/stores/types'
+import type { QuestionnaireKind } from '@/types/common'
 
 export function useParticipantsView() {
   const participantsQuery = useParticipantsOverviewQuery()
