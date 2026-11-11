@@ -30,6 +30,7 @@ const {
   onConfirmDelete,
   onReorder,
   onShuffle,
+  onResetOrder,
 } = useQuestionnaireDetailView()
 
 const { data: questionnaire } = questionnaireQuery
@@ -64,7 +65,16 @@ const choiceText = (question: QuestionWithKey, key: (typeof choiceKeys)[number])
           <v-btn color="primary" prepend-icon="mdi-plus" @click="onCreate">New question</v-btn>
         </div>
 
-        <div class="d-flex justify-end mt-6">
+        <div class="d-flex justify-end ga-2 mt-6">
+          <v-btn
+            :disabled="orderedQuestions.length < 2 || reorderQuestions.isPending.value"
+            prepend-icon="mdi-restore"
+            size="small"
+            variant="text"
+            @click="onResetOrder"
+          >
+            Reset
+          </v-btn>
           <v-btn
             :disabled="orderedQuestions.length < 2"
             :loading="reorderQuestions.isPending.value"
