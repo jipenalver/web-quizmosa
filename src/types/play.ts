@@ -24,3 +24,13 @@ export type PlayReveal = {
   } | null
   counts?: Record<string, number>
 }
+// From get_my_progress. Only a pre-test uses the per-participant question and timer.
+export type PlayProgress = {
+  kind: QuestionnaireKind
+  question_id: number | null
+  question_started_at: string | null
+  question_ends_at: string | null
+  served: number
+  total: number
+  finished_at: string | null
+}

@@ -8,9 +8,19 @@ const props = defineProps<{
   loading: boolean
   error: unknown
   canKick: boolean
+  // Set on a pre-test, where each quizzer moves at their own pace.
+  progressTotal?: number
 }>()
 
 const emit = defineEmits<{ kick: [participant: Participant]; retry: [] }>()
+
+const progressText = (participant: Participant) => {
+  if (participant.is_kicked) return 'Kicked'
+  if (props.progressTotal === undefined) return undefined
+  if (participant.finished_at) return 'Done'
+  if (participant.questions_served === 0) return 'Not started'
+  return `Question ${participant.questions_served} of ${props.progressTotal}`
+}
 
 const activeCount = computed(
   () => props.participants.filter((participant) => !participant.is_kicked).length,
@@ -34,7 +44,7 @@ const activeCount = computed(
           v-for="participant in participants"
           :key="participant.id"
           :class="{ 'opacity-50': participant.is_kicked }"
-          :subtitle="participant.is_kicked ? 'Kicked' : undefined"
+          :subtitle="progressText(participant)"
           :title="participant.display_name"
         >
           <template v-if="canKick && !participant.is_kicked" #append>

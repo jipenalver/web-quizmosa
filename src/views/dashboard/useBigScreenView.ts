@@ -37,8 +37,12 @@ export function useBigScreenView() {
     Object.values(countsQuery.data.value ?? {}).reduce((total, count) => total + count, 0),
   )
 
-  const participantCount = computed(
-    () => (participantsQuery.data.value ?? []).filter((person) => !person.is_kicked).length,
+  const activeParticipants = computed(() =>
+    (participantsQuery.data.value ?? []).filter((person) => !person.is_kicked),
+  )
+  const participantCount = computed(() => activeParticipants.value.length)
+  const doneCount = computed(
+    () => activeParticipants.value.filter((person) => person.finished_at).length,
   )
 
   const { seconds, percent } = useCountdown(
@@ -73,6 +77,7 @@ export function useBigScreenView() {
     isPretest,
     answeredCount,
     participantCount,
+    doneCount,
     seconds,
     percent,
     isFullscreen,

@@ -22,7 +22,7 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 
 - Join with a 6-character code or QR, using Supabase anonymous sign-in
 - Answer on a mobile-first screen with a countdown, reveal and final rank
-- Pre-tests never show the correct answer, so they don't spoil the post-test
+- Pre-tests are self-paced: each quizzer taps Next on their own timer, and they never show the correct answer, so they don't spoil the post-test
 
 ## Tech stack
 
@@ -62,6 +62,7 @@ Run these in the Supabase SQL Editor, in this order:
 3. `supabase/migrations/20261107000002_session_rpcs.sql`
 4. `supabase/migrations/20261107000003_storage_questions.sql`
 5. `supabase/migrations/20261107000004_participants_full_name.sql`
+6. `supabase/migrations/20261111000005_self_paced_pretest.sql`
 
 Create a storage bucket named `questions` before you run step 4. The migration makes it private, so images are served through signed URLs.
 

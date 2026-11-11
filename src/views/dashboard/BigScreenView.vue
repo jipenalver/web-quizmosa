@@ -21,6 +21,7 @@ const {
   isPretest,
   answeredCount,
   participantCount,
+  doneCount,
   seconds,
   percent,
   isFullscreen,
@@ -66,6 +67,16 @@ const choices = computed(() =>
             <p class="big-text mt-4">{{ participantCount }} joined</p>
           </div>
           <QrCode :size="360" :value="joinUrl" />
+        </div>
+
+        <!-- A self-paced pre-test has no shared question, so the room sees live points. -->
+        <div v-else-if="session.status === 'question' && isPretest" class="flex-grow-1">
+          <span class="text-label">Pre-test in progress</span>
+          <h1 class="big-prompt font-weight-bold mt-2">Answer on your phone</h1>
+          <p class="big-text mt-4">{{ doneCount }} of {{ participantCount }} done</p>
+
+          <span class="text-label d-block mt-12">Leaderboard</span>
+          <LeaderboardList :limit="8" :rows="leaderboard" class="mt-4" large />
         </div>
 
         <div v-else-if="session.status === 'question' && currentQuestion" class="flex-grow-1">

@@ -44,6 +44,7 @@ __screenshots__/
 .playwright-mcp
 CLAUDE.md
 docs
+graphify-out
 
 # Environment Variables
 .env

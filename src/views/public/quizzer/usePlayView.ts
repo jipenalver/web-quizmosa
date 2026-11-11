@@ -3,6 +3,8 @@ import { useRoute } from 'vue-router'
 import {
   useFinalLeaderboardQuery,
   useMyAnswerQuery,
+  useMyProgressQuery,
+  useNextQuestion,
   usePlayParticipantQuery,
   usePlayQuestionQuery,
   usePlayRealtime,
@@ -32,7 +34,17 @@ export function usePlayView() {
 
   const session = sessionQuery.data
   const status = computed(() => session.value?.status)
-  const questionId = computed(() => session.value?.current_question_id ?? null)
+
+  // A pre-test is self-paced: each quizzer has their own question and timer.
+  const progressQuery = useMyProgressQuery(code, sessionId)
+  const progress = progressQuery.data
+  const isSelfPaced = computed(() => progress.value?.kind === 'pretest')
+
+  const questionId = computed(() =>
+    isSelfPaced.value
+      ? (progress.value?.question_id ?? null)
+      : (session.value?.current_question_id ?? null),
+  )
   const isReveal = computed(() => status.value === 'reveal')
   const isFinished = computed(() => status.value === 'finished')
 
@@ -42,6 +54,7 @@ export function usePlayView() {
   const revealQuery = useRevealQuery(code, sessionId, questionId, isReveal)
   const leaderboardQuery = useFinalLeaderboardQuery(code, sessionId, isFinished)
   const submitAnswer = useSubmitAnswer(code)
+  const nextQuestion = useNextQuestion(code)
 
   const participant = participantQuery.data
   const participantId = computed(() => participant.value?.id)
@@ -49,8 +62,9 @@ export function usePlayView() {
   usePlayRealtime(code, sessionId, participantId)
 
   const { seconds, percent, isOver } = useCountdown(
-    () => session.value?.question_started_at,
-    () => session.value?.question_ends_at,
+    () =>
+      isSelfPaced.value ? progress.value?.question_started_at : session.value?.question_started_at,
+    () => (isSelfPaced.value ? progress.value?.question_ends_at : session.value?.question_ends_at),
   )
 
   // States
@@ -76,6 +90,8 @@ export function usePlayView() {
     if (!session.value) return 'missing'
     if (status.value === 'lobby') return 'lobby'
     if (status.value === 'finished') return 'finished'
+    if (isSelfPaced.value && progress.value?.finished_at) return 'done'
+    if (isSelfPaced.value && questionId.value === null) return 'ready'
     if (status.value === 'reveal') return 'reveal'
     if (myAnswer.value) return 'locked'
     return isOver.value ? 'timeup' : 'question'
@@ -98,6 +114,16 @@ export function usePlayView() {
     }
   }
 
+  const onNext = async () => {
+    if (sessionId.value === undefined || nextQuestion.isPending.value) return
+
+    try {
+      await nextQuestion.mutateAsync(sessionId.value)
+    } catch (error) {
+      notice.value = handleFormError(error).message
+    }
+  }
+
   // Expose State and Actions
   return {
     code,
@@ -107,6 +133,9 @@ export function usePlayView() {
     revealQuery,
     leaderboardQuery,
     submitAnswer,
+    nextQuestion,
+    progress,
+    isSelfPaced,
     screen,
     myAnswer,
     myResult,
@@ -115,5 +144,6 @@ export function usePlayView() {
     notice,
     isNoticeOpen,
     onAnswer,
+    onNext,
   }
 }

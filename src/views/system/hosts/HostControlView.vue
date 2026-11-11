@@ -16,6 +16,7 @@ const {
   finishSession,
   kickParticipant,
   session,
+  isPretest,
   questions,
   activeParticipants,
   currentIndex,
@@ -31,6 +32,7 @@ const {
   notice,
   isNoticeOpen,
   onStartNext,
+  onOpenPretest,
   onReveal,
   onReturnToLobby,
   onConfirmFinish,
@@ -44,6 +46,9 @@ const isLive = computed(() => session.value?.status !== 'finished')
 const isInQuestion = computed(
   () => session.value?.status === 'question' || session.value?.status === 'reveal',
 )
+
+// Matches the server, which only hands out questions that have a correct answer.
+const pretestTotal = computed(() => questions.value.filter((q) => q.question_keys).length)
 </script>
 
 <template>
@@ -89,7 +94,7 @@ const isInQuestion = computed(
               Leaderboard
             </v-btn>
             <v-btn
-              v-if="isInQuestion"
+              v-if="isInQuestion && !isPretest"
               :disabled="isBusy"
               prepend-icon="mdi-keyboard-return"
               variant="text"
@@ -105,8 +110,20 @@ const isInQuestion = computed(
             >
               Finish
             </v-btn>
+            <!-- A pre-test only has Start; quizzers move through it themselves. -->
+            <template v-if="isPretest">
+              <v-btn
+                v-if="session.status === 'lobby'"
+                :loading="isBusy"
+                color="primary"
+                prepend-icon="mdi-play"
+                @click="onOpenPretest"
+              >
+                Start
+              </v-btn>
+            </template>
             <v-btn
-              v-if="session.status === 'question'"
+              v-else-if="session.status === 'question'"
               :loading="isBusy"
               color="primary"
               prepend-icon="mdi-eye-outline"
@@ -143,6 +160,14 @@ const isInQuestion = computed(
                 :total="questions.length"
               />
 
+              <v-card v-if="isPretest && session.status === 'question'" class="pa-6">
+                <span class="text-label">Pre-test open</span>
+                <p class="text-body-large mt-2">
+                  Quizzers go at their own pace. Progress shows next to each name. Finish when
+                  everyone is done.
+                </p>
+              </v-card>
+
               <v-card v-if="session.status === 'finished'" class="pa-6">
                 <span class="text-label">Finished</span>
                 <p class="text-body-large mt-2">This host has ended.</p>
@@ -170,6 +195,7 @@ const isInQuestion = computed(
               :error="participantsQuery.error.value"
               :loading="participantsQuery.isPending.value"
               :participants="participantsQuery.data.value ?? []"
+              :progress-total="isPretest ? pretestTotal : undefined"
               @kick="onAskKick"
               @retry="participantsQuery.refetch()"
             />

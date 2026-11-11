@@ -90,6 +90,12 @@ export function useQuestionnaireDetailView() {
     onReorder()
   }
 
+  // Ids only grow, so sorting by id restores the order the questions were added in.
+  const onResetOrder = () => {
+    orderedQuestions.value = [...orderedQuestions.value].sort((a, b) => a.id - b.id)
+    onReorder()
+  }
+
   // Expose State and Actions
   return {
     questionnaireId,
@@ -110,5 +116,6 @@ export function useQuestionnaireDetailView() {
     onConfirmDelete,
     onReorder,
     onShuffle,
+    onResetOrder,
   }
 }

@@ -4,7 +4,13 @@ import { queryClient } from '@/utils/queryClient'
 import { supabase } from '@/utils/supabase'
 import type { ChoiceKey } from '@/types/common'
 import type { LeaderboardRow } from '@/types/dashboard'
-import type { PlayParticipant, PlayQuestion, PlayReveal, PlaySession } from '@/types/play'
+import type {
+  PlayParticipant,
+  PlayProgress,
+  PlayQuestion,
+  PlayReveal,
+  PlaySession,
+} from '@/types/play'
 
 export const playKeys = {
   session: (code: string) => ['play', code, 'session'] as const,
@@ -16,6 +22,7 @@ export const playKeys = {
   reveal: (code: string, questionId?: number | null) =>
     ['play', code, 'reveal', questionId] as const,
   leaderboard: (code: string) => ['play', code, 'leaderboard'] as const,
+  progress: (code: string) => ['play', code, 'progress'] as const,
 }
 
 // Profile and joining. The app only asks whether a profile exists, and never reads quizzers.
@@ -79,6 +86,31 @@ export function usePlayParticipantQuery(code: string, sessionId: Ref<number | un
       if (error) throw error
       return data
     },
+  })
+}
+
+export function useMyProgressQuery(code: string, sessionId: Ref<number | undefined>) {
+  return useQuery({
+    queryKey: playKeys.progress(code),
+    enabled: computed(() => sessionId.value !== undefined),
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc('get_my_progress', {
+        p_session_id: sessionId.value ?? 0,
+      })
+      if (error) throw error
+      return data as unknown as PlayProgress | null
+    },
+  })
+}
+
+// Pre-test only: the server hands out the next question and starts this quizzer's timer.
+export function useNextQuestion(code: string) {
+  return useMutation({
+    mutationFn: async (sessionId: number) => {
+      const { error } = await supabase.rpc('next_question', { p_session_id: sessionId })
+      if (error) throw error
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: playKeys.progress(code) }),
   })
 }
 
@@ -186,6 +218,7 @@ export function usePlayRealtime(
       const catchUp = () => {
         queryClient.invalidateQueries({ queryKey: playKeys.session(code) })
         queryClient.invalidateQueries({ queryKey: playKeys.participant(code) })
+        queryClient.invalidateQueries({ queryKey: playKeys.progress(code) })
       }
 
       const channel = supabase
@@ -204,7 +237,10 @@ export function usePlayRealtime(
             table: 'participants',
             filter: `id=eq.${participant}`,
           },
-          () => queryClient.invalidateQueries({ queryKey: playKeys.participant(code) }),
+          () => {
+            queryClient.invalidateQueries({ queryKey: playKeys.participant(code) })
+            queryClient.invalidateQueries({ queryKey: playKeys.progress(code) })
+          },
         )
         .subscribe((status) => {
           if (status === 'SUBSCRIBED') catchUp()
