@@ -129,6 +129,14 @@ export function useStartQuestion(sessionId: number) {
   })
 }
 
+// Pre-test only: opens it once, then each quizzer goes at their own pace.
+export function useOpenPretest(sessionId: number) {
+  return useSessionControl<void>(sessionId, async () => {
+    const { error } = await supabase.rpc('open_pretest', { p_session_id: sessionId })
+    if (error) throw error
+  })
+}
+
 export function useRevealQuestion(sessionId: number) {
   return useSessionControl<void>(sessionId, async () => {
     const { error } = await supabase.rpc('reveal_question', { p_session_id: sessionId })

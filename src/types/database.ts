@@ -89,30 +89,52 @@ export type Database = {
       }
       participants: {
         Row: {
+          current_question_id: number | null
           display_name: string
+          finished_at: string | null
           id: number
           is_kicked: boolean
           joined_at: string
+          question_ends_at: string | null
+          question_started_at: string | null
+          questions_served: number
           quizzer_id: number
           session_id: number
         }
         Insert: {
+          current_question_id?: number | null
           display_name: string
+          finished_at?: string | null
           id?: never
           is_kicked?: boolean
           joined_at?: string
+          question_ends_at?: string | null
+          question_started_at?: string | null
+          questions_served?: number
           quizzer_id: number
           session_id: number
         }
         Update: {
+          current_question_id?: number | null
           display_name?: string
+          finished_at?: string | null
           id?: never
           is_kicked?: boolean
           joined_at?: string
+          question_ends_at?: string | null
+          question_started_at?: string | null
+          questions_served?: number
           quizzer_id?: number
           session_id?: number
         }
         Relationships: [
+          {
+            foreignKeyName: 'participants_current_question_id_fkey'
+            columns: ['current_question_id']
+            isOneToOne: false
+            referencedRelation: 'questions'
+            referencedColumns: ['id']
+          },
           {
             foreignKeyName: 'participants_quizzer_id_fkey'
             columns: ['quizzer_id']
@@ -375,6 +397,7 @@ export type Database = {
         Args: { p_question_id: number; p_session_id: number }
         Returns: string
       }
+      get_my_progress: { Args: { p_session_id: number }; Returns: Json }
       get_participants_overview: {
         Args: never
         Returns: {
@@ -409,6 +432,8 @@ export type Database = {
       my_hosted_session_ids: { Args: never; Returns: number[] }
       my_quizzer_id: { Args: never; Returns: number }
       my_session_ids: { Args: never; Returns: number[] }
+      next_question: { Args: { p_session_id: number }; Returns: undefined }
+      open_pretest: { Args: { p_session_id: number }; Returns: undefined }
       reorder_questions: {
         Args: { p_ids: number[]; p_questionnaire_id: number }
         Returns: undefined

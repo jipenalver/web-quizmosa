@@ -4,6 +4,7 @@ import {
   useCountdown,
   useFinishSession,
   useKickParticipant,
+  useOpenPretest,
   useParticipantsQuery,
   useReturnToLobby,
   useRevealQuestion,
@@ -26,6 +27,7 @@ export function useHostControlView() {
   const questionsQuery = useSessionQuestionsQuery(() => sessionQuery.data.value?.questionnaire_id)
 
   const startQuestion = useStartQuestion(sessionId)
+  const openPretest = useOpenPretest(sessionId)
   const revealQuestion = useRevealQuestion(sessionId)
   const finishSession = useFinishSession(sessionId)
   const returnToLobby = useReturnToLobby(sessionId)
@@ -47,6 +49,7 @@ export function useHostControlView() {
   })
 
   const session = sessionQuery.data
+  const isPretest = computed(() => session.value?.questionnaires?.kind === 'pretest')
   const questions = computed(() => questionsQuery.data.value ?? [])
   const reportQuestions = computed(() => reportQuery.data.value?.questions ?? [])
 
@@ -72,6 +75,7 @@ export function useHostControlView() {
   const isBusy = computed(
     () =>
       startQuestion.isPending.value ||
+      openPretest.isPending.value ||
       revealQuestion.isPending.value ||
       finishSession.isPending.value ||
       returnToLobby.isPending.value,
@@ -95,6 +99,8 @@ export function useHostControlView() {
     const next = nextQuestion.value
     if (next) run(() => startQuestion.mutateAsync(next.id))
   }
+
+  const onOpenPretest = () => run(() => openPretest.mutateAsync())
 
   const onReveal = () => run(() => revealQuestion.mutateAsync())
 
@@ -123,6 +129,7 @@ export function useHostControlView() {
     finishSession,
     kickParticipant,
     session,
+    isPretest,
     questions,
     activeParticipants,
     currentIndex,
@@ -138,6 +145,7 @@ export function useHostControlView() {
     notice,
     isNoticeOpen,
     onStartNext,
+    onOpenPretest,
     onReveal,
     onReturnToLobby,
     onConfirmFinish,
