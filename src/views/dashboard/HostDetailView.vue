@@ -7,14 +7,42 @@ import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
 import { countAxis, formatPercent, scoreBins } from '@/utils/helpers/charts'
 import { formatDate } from '@/utils/helpers/dates'
+import { questionChoices } from '@/utils/helpers/questions'
 import { useHostDetailView } from './useHostDetailView'
 
-const { sessionQuery, reportQuery, summary } = useHostDetailView()
+const { sessionQuery, reportQuery, summary, questionById } = useHostDetailView()
 
 const { data: session } = sessionQuery
 const { data: report, isPending, error, refetch } = reportQuery
 
 const questions = computed(() => report.value?.questions ?? [])
+
+// Report rows with the choices and the correct key, once the questions have loaded.
+const questionRows = computed(() =>
+  questions.value.map((question) => {
+    const full = questionById.value.get(question.question_id)
+    return {
+      ...question,
+      choices: full ? questionChoices(full) : [],
+      correct: full?.question_keys?.correct_choice ?? null,
+    }
+  }),
+)
+
+// Unanswered questions have null accuracy and response time, so null sorts as the lowest.
+const nullableSort = (a: number | null, b: number | null) => (a ?? -1) - (b ?? -1)
+
+const questionHeaders = [
+  { title: 'Question', key: 'prompt', sortable: false },
+  { title: 'Answered', key: 'answered', align: 'end' as const },
+  { title: 'Accuracy', key: 'accuracy', align: 'end' as const, sort: nullableSort },
+  {
+    title: 'Average response',
+    key: 'average_response_ms',
+    align: 'end' as const,
+    sort: nullableSort,
+  },
+]
 
 const barOptions = (formatter: (value: number) => string): ApexOptions => ({
   colors: ['#E0441D'],
@@ -139,30 +167,38 @@ const responseSeries = computed(() => [
       </v-row>
 
       <v-card class="pa-2 mt-6">
-        <v-table>
-          <thead>
-            <tr>
-              <th>Question</th>
-              <th class="text-right">Answered</th>
-              <th class="text-right">Accuracy</th>
-              <th class="text-right">Average response</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="question in questions" :key="question.question_id">
-              <td>Q{{ question.position }}. {{ question.prompt }}</td>
-              <td class="text-right">{{ question.answered }}</td>
-              <td class="text-right">{{ formatPercent(question.accuracy) }}</td>
-              <td class="text-right text-no-wrap">
-                {{
-                  question.average_response_ms === null
-                    ? '–'
-                    : `${(question.average_response_ms / 1000).toFixed(1)}s`
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
+        <v-data-table
+          :headers="questionHeaders"
+          :items="questionRows"
+          :items-per-page="-1"
+          hide-default-footer
+          item-value="question_id"
+        >
+          <template #[`item.prompt`]="{ item }">
+            <div class="py-3">
+              <div class="font-weight-bold">Q{{ item.position }}. {{ item.prompt }}</div>
+              <div
+                v-for="choice in item.choices"
+                :key="choice.key"
+                :class="choice.key === item.correct ? 'text-success font-weight-bold' : 'text-muted'"
+                class="text-body-medium mt-1"
+              >
+                {{ choice.key }}. {{ choice.text }}
+                <v-icon v-if="choice.key === item.correct" icon="mdi-check" size="small"></v-icon>
+              </div>
+            </div>
+          </template>
+          <template #[`item.accuracy`]="{ item }">{{ formatPercent(item.accuracy) }}</template>
+          <template #[`item.average_response_ms`]="{ item }">
+            <span class="text-no-wrap">
+              {{
+                item.average_response_ms === null
+                  ? '–'
+                  : `${(item.average_response_ms / 1000).toFixed(1)}s`
+              }}
+            </span>
+          </template>
+        </v-data-table>
       </v-card>
     </QueryState>
   </v-container>
