@@ -5,6 +5,7 @@ import AppLogo from '@/components/common/AppLogo.vue'
 import ThemeToggle from '@/components/common/ThemeToggle.vue'
 import SideNavigation from '@/components/navigation/SideNavigation.vue'
 import { useAuthUserStore } from '@/stores/authUser'
+import FooterNavigation from '../navigation/FooterNavigation.vue'
 
 const router = useRouter()
 const authUserStore = useAuthUserStore()
@@ -47,4 +48,6 @@ const onSignOut = async () => {
   <v-main>
     <RouterView />
   </v-main>
+
+  <FooterNavigation />
 </template>

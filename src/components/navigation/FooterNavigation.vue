@@ -1,5 +1,18 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    isBackground?: boolean
+  }>(),
+  { isBackground: false },
+)
+</script>
+
 <template>
-  <v-footer app class="flex-column ga-1 text-center" color="background">
+  <v-footer
+    app
+    class="flex-column ga-1 text-center"
+    :color="isBackground ? 'background' : 'surface'"
+  >
     <span class="text-label">Live quizzes. Spill the answers.</span>
 
     <span class="text-body-small text-muted">

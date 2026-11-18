@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
+import type { ParticipantOverviewRow } from '@/types/dashboard'
 import { kindOptions } from '@/utils/helpers/constants'
 import { formatDate } from '@/utils/helpers/dates'
 import { useParticipantsView } from './useParticipantsView'
@@ -15,7 +16,14 @@ const headers = [
   { title: 'Host', key: 'join_code' },
   { title: 'Questionnaire', key: 'questionnaire_name' },
   { title: 'Kind', key: 'kind' },
-  { title: 'Score', key: 'score', align: 'end' as const },
+  {
+    title: 'Score',
+    key: 'score',
+    align: 'end' as const,
+    // Ties go to the faster player, as on the leaderboard. Descending puts the best first.
+    sortRaw: (a: ParticipantOverviewRow, b: ParticipantOverviewRow) =>
+      a.score - b.score || b.total_correct_ms - a.total_correct_ms,
+  },
   { title: 'Joined', key: 'joined_at' },
 ]
 </script>

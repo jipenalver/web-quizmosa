@@ -418,6 +418,7 @@ export type Database = {
           questionnaire_name: string
           score: number
           session_id: number
+          total_correct_ms: number
         }[]
       }
       get_reveal: {
