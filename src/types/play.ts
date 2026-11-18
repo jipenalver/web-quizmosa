@@ -1,5 +1,5 @@
 import type { Tables } from './database'
-import type { QuestionnaireKind } from './common'
+import type { SessionKind } from './common'
 import type { Question } from './questionnaires'
 import type { Participant } from './sessions'
 
@@ -14,7 +14,7 @@ export type PlayQuestion = Pick<
 >
 // Pre-tests only carry kind and points_so_far. get_reveal returns null outside a reveal.
 export type PlayReveal = {
-  kind: QuestionnaireKind
+  kind: SessionKind
   points_so_far: number
   correct_choice?: string
   my_answer?: {
@@ -26,7 +26,7 @@ export type PlayReveal = {
 }
 // From get_my_progress. Only a pre-test uses the per-participant question and timer.
 export type PlayProgress = {
-  kind: QuestionnaireKind
+  kind: SessionKind
   question_id: number | null
   question_started_at: string | null
   question_ends_at: string | null

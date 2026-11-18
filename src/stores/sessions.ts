@@ -3,6 +3,7 @@ import { useMutation, useQuery, type QueryKey } from '@tanstack/vue-query'
 import { queryClient } from '@/utils/queryClient'
 import { supabase } from '@/utils/supabase'
 import { questionnaireKeys } from './questionnaires'
+import type { SessionKind } from '@/types/common'
 import type { QuestionWithKey } from '@/types/questionnaires'
 import type { HostSession, HostSessionWithCounts, Participant, SessionReport } from '@/types/sessions'
 
@@ -25,7 +26,7 @@ export function useSessionsQuery() {
     queryFn: async (): Promise<HostSessionWithCounts[]> => {
       const { data, error } = await supabase
         .from('sessions')
-        .select('*, questionnaires(name, kind), participants(count)')
+        .select('*, questionnaires(name), participants(count)')
         .order('created_at', { ascending: false })
       if (error) throw error
       return data
@@ -39,7 +40,7 @@ export function useSessionQuery(id: number) {
     queryFn: async (): Promise<HostSession> => {
       const { data, error } = await supabase
         .from('sessions')
-        .select('*, questionnaires(name, kind)')
+        .select('*, questionnaires(name)')
         .eq('id', id)
         .single()
       if (error) throw error
@@ -95,9 +96,10 @@ export function useSessionQuestionsQuery(questionnaireId: MaybeRefOrGetter<numbe
 
 export function useCreateSession() {
   return useMutation({
-    mutationFn: async (questionnaireId: number) => {
+    mutationFn: async ({ questionnaireId, kind }: { questionnaireId: number; kind: SessionKind }) => {
       const { data, error } = await supabase.rpc('create_session', {
         p_questionnaire_id: questionnaireId,
+        p_kind: kind,
       })
       if (error) throw error
       return data

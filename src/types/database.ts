@@ -179,7 +179,6 @@ export type Database = {
           created_at: string
           host_id: number
           id: number
-          kind: Database['public']['Enums']['questionnaire_kind']
           name: string
           seconds_per_question: number
         }
@@ -187,7 +186,6 @@ export type Database = {
           created_at?: string
           host_id: number
           id?: never
-          kind?: Database['public']['Enums']['questionnaire_kind']
           name: string
           seconds_per_question?: number
         }
@@ -195,7 +193,6 @@ export type Database = {
           created_at?: string
           host_id?: number
           id?: never
-          kind?: Database['public']['Enums']['questionnaire_kind']
           name?: string
           seconds_per_question?: number
         }
@@ -294,6 +291,7 @@ export type Database = {
           host_id: number
           id: number
           join_code: string
+          kind: Database['public']['Enums']['session_kind']
           question_ends_at: string | null
           question_started_at: string | null
           questionnaire_id: number
@@ -307,6 +305,7 @@ export type Database = {
           host_id: number
           id?: never
           join_code: string
+          kind: Database['public']['Enums']['session_kind']
           question_ends_at?: string | null
           question_started_at?: string | null
           questionnaire_id: number
@@ -320,6 +319,7 @@ export type Database = {
           host_id?: number
           id?: never
           join_code?: string
+          kind?: Database['public']['Enums']['session_kind']
           question_ends_at?: string | null
           question_started_at?: string | null
           questionnaire_id?: number
@@ -367,7 +367,13 @@ export type Database = {
         }
         Returns: undefined
       }
-      create_session: { Args: { p_questionnaire_id: number }; Returns: number }
+      create_session: {
+        Args: {
+          p_kind: Database['public']['Enums']['session_kind']
+          p_questionnaire_id: number
+        }
+        Returns: number
+      }
       finish_session: { Args: { p_session_id: number }; Returns: undefined }
       get_history: {
         Args: never
@@ -375,7 +381,7 @@ export type Database = {
           average_accuracy: number
           average_score: number
           ended_at: string
-          kind: Database['public']['Enums']['questionnaire_kind']
+          kind: Database['public']['Enums']['session_kind']
           participant_count: number
           questionnaire_id: number
           questionnaire_name: string
@@ -407,7 +413,7 @@ export type Database = {
           is_kicked: boolean
           join_code: string
           joined_at: string
-          kind: Database['public']['Enums']['questionnaire_kind']
+          kind: Database['public']['Enums']['session_kind']
           participant_id: number
           questionnaire_name: string
           score: number
@@ -468,7 +474,7 @@ export type Database = {
       }
     }
     Enums: {
-      questionnaire_kind: 'standard' | 'pretest' | 'posttest'
+      session_kind: 'pretest' | 'posttest'
       session_status: 'lobby' | 'question' | 'reveal' | 'finished'
     }
     CompositeTypes: {
@@ -591,7 +597,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      questionnaire_kind: ['standard', 'pretest', 'posttest'],
+      session_kind: ['pretest', 'posttest'],
       session_status: ['lobby', 'question', 'reveal', 'finished'],
     },
   },

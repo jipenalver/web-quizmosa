@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRules } from 'vuetify'
 import type { QuestionnaireWithCounts } from '@/types/questionnaires'
-import { kindOptions, secondsMax, secondsMin } from '@/utils/helpers/constants'
+import { secondsMax, secondsMin } from '@/utils/helpers/constants'
 import { useQuestionnaireFormDialog } from './useQuestionnaireFormDialog'
 
 const isOpen = defineModel<boolean>({ required: true })
@@ -10,7 +10,7 @@ const props = defineProps<{ questionnaire: QuestionnaireWithCounts | null }>()
 
 const rules = useRules()
 
-const { formData, formAction, refVForm, isEditing, isKindLocked, onFormSubmit } =
+const { formData, formAction, refVForm, isEditing, onFormSubmit } =
   useQuestionnaireFormDialog(isOpen, () => props.questionnaire)
 
 const secondsRule = (value: string) =>
@@ -38,16 +38,6 @@ const secondsRule = (value: string) =>
             class="mb-2"
             label="Name"
           ></v-text-field>
-
-          <v-select
-            v-model="formData.kind"
-            :disabled="isKindLocked"
-            :hint="isKindLocked ? 'Kind is locked because this questionnaire has hosts.' : ''"
-            :items="kindOptions"
-            class="mb-2"
-            label="Kind"
-            persistent-hint
-          ></v-select>
 
           <v-text-field
             v-model="formData.seconds"

@@ -6,7 +6,7 @@ export type QuestionnaireWithCounts = Questionnaire & {
   questions: { count: number }[]
   sessions: { count: number }[]
 }
-export type QuestionnaireInput = Pick<Questionnaire, 'name' | 'kind' | 'seconds_per_question'> & {
+export type QuestionnaireInput = Pick<Questionnaire, 'name' | 'seconds_per_question'> & {
   id: number | null
 }
 

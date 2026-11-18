@@ -4,7 +4,7 @@ import type { Questionnaire } from './questionnaires'
 export type Host = Tables<'hosts'>
 
 export type HostSession = Tables<'sessions'> & {
-  questionnaires: Pick<Questionnaire, 'name' | 'kind'> | null
+  questionnaires: Pick<Questionnaire, 'name'> | null
 }
 export type HostSessionWithCounts = HostSession & {
   participants: { count: number }[]

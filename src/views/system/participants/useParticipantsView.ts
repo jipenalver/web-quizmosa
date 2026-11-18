@@ -1,13 +1,13 @@
 import { computed, ref } from 'vue'
 import { useParticipantsOverviewQuery } from '@/stores/dashboard'
-import type { QuestionnaireKind } from '@/types/common'
+import type { SessionKind } from '@/types/common'
 
 export function useParticipantsView() {
   const participantsQuery = useParticipantsOverviewQuery()
 
   // States
   const search = ref('')
-  const kind = ref<QuestionnaireKind | null>(null)
+  const kind = ref<SessionKind | null>(null)
   const sessionId = ref<number | null>(null)
 
   const hostOptions = computed(() => {

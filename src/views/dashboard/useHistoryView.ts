@@ -1,14 +1,14 @@
 import { computed, ref } from 'vue'
 import { useHistoryQuery } from '@/stores/dashboard'
 import { useSessionsQuery } from '@/stores/sessions'
-import type { QuestionnaireKind } from '@/types/common'
+import type { SessionKind } from '@/types/common'
 
 export function useHistoryView() {
   const historyQuery = useHistoryQuery()
   const sessionsQuery = useSessionsQuery()
 
   // States
-  const kind = ref<QuestionnaireKind | null>(null)
+  const kind = ref<SessionKind | null>(null)
   const dateFrom = ref('')
   const dateTo = ref('')
 
