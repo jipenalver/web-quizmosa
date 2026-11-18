@@ -22,5 +22,5 @@ const route = useRoute()
     <RouterView />
   </v-main>
 
-  <FooterNavigation v-if="!route.meta.hideFooter" />
+  <FooterNavigation v-if="!route.meta.hideFooter" :is-background="true" />
 </template>
