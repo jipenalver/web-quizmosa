@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import QueryState from '@/components/common/QueryState.vue'
+import { useExportPdf } from '@/utils/helpers/print'
 import AwardPodium from './partials/AwardPodium.vue'
 import { useQuestionnaireComparisonView } from './useQuestionnaireComparisonView'
 
@@ -50,6 +51,17 @@ const headers = [
   },
 ]
 
+const itemsPerPage = ref(10)
+const exportPdf = useExportPdf()
+
+// The PDF holds every participant, not just the current table page.
+const onExportPdf = () =>
+  exportPdf(`${questionnaire.value?.name ?? 'Questionnaire'} · Pre-test vs post-test`, () => {
+    const previous = itemsPerPage.value
+    itemsPerPage.value = -1
+    return () => (itemsPerPage.value = previous)
+  })
+
 const formatGap = (gap: number) => (gap > 0 ? `+${gap}` : String(gap))
 
 const bestWinners = computed(() =>
@@ -71,13 +83,25 @@ const kalamboanWinners = computed(() =>
 
 <template>
   <v-container>
-    <RouterLink :to="{ name: 'Dashboard' }" class="text-body-medium text-muted">
+    <RouterLink :to="{ name: 'Dashboard' }" class="text-body-medium text-muted d-print-none">
       Back to dashboard
     </RouterLink>
 
-    <div class="mt-2 mb-6">
-      <span class="text-label">Pre-test vs post-test</span>
-      <h1 class="text-headline-medium font-weight-bold">{{ questionnaire?.name }}</h1>
+    <div class="d-flex flex-wrap align-start justify-space-between ga-4 mt-2 mb-6">
+      <div>
+        <span class="text-label">Pre-test vs post-test</span>
+        <h1 class="text-headline-medium font-weight-bold">{{ questionnaire?.name }}</h1>
+      </div>
+
+      <v-btn
+        :disabled="isPending || rows.length === 0"
+        class="d-print-none"
+        prepend-icon="mdi-file-pdf-box"
+        variant="tonal"
+        @click="onExportPdf"
+      >
+        Export PDF
+      </v-btn>
     </div>
 
     <QueryState
@@ -107,6 +131,7 @@ const kalamboanWinners = computed(() =>
 
       <v-card class="pa-2 mt-6">
         <v-data-table
+          v-model:items-per-page="itemsPerPage"
           :headers="headers"
           :items="rows"
           :sort-by="[{ key: 'total', order: 'desc' }]"

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick } from 'vue'
+import { computed } from 'vue'
 import type { ApexOptions } from 'apexcharts'
 import { RouterLink } from 'vue-router'
-import { useTheme } from 'vuetify'
 import AppChart from '@/components/common/AppChart.vue'
 import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
 import { countAxis, formatPercent, scoreBins } from '@/utils/helpers/charts'
 import { formatDate } from '@/utils/helpers/dates'
+import { useExportPdf } from '@/utils/helpers/print'
 import { questionChoices } from '@/utils/helpers/questions'
 import { useHostDetailView } from './useHostDetailView'
 
@@ -18,27 +18,12 @@ const { data: report, isPending, error, refetch } = reportQuery
 
 const questions = computed(() => report.value?.questions ?? [])
 
-const theme = useTheme()
+const exportPdf = useExportPdf()
 
-// The browser's print dialog saves the PDF. The report always prints in the light theme,
-// and the document title becomes the suggested file name.
-const onExportPdf = async () => {
-  const previousTheme = theme.global.name.value
-  const previousTitle = document.title
-
-  theme.change('light')
-  document.title = [session.value?.questionnaires?.name, session.value?.join_code]
-    .filter(Boolean)
-    .join(' · ')
-  await nextTick()
-  // Let the charts redraw in the light colors before the page is captured.
-  await new Promise((resolve) => setTimeout(resolve, 300))
-
-  window.print()
-
-  document.title = previousTitle
-  theme.change(previousTheme)
-}
+const onExportPdf = () =>
+  exportPdf(
+    [session.value?.questionnaires?.name, session.value?.join_code].filter(Boolean).join(' · '),
+  )
 
 // Report rows with the choices and the correct key, once the questions have loaded.
 const questionRows = computed(() =>

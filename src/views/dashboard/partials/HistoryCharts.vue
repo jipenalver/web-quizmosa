@@ -87,7 +87,7 @@ const participantOptions = computed<ApexOptions>(() => ({
 <template>
   <v-row>
     <v-col cols="12" md="7">
-      <v-card class="pa-4">
+      <v-card class="pa-4 h-100">
         <span class="text-label">Average score, pre-test vs post-test</span>
         <AppChart
           :options="scoreOptions"
@@ -111,9 +111,11 @@ const participantOptions = computed<ApexOptions>(() => ({
     </v-col>
 
     <v-col cols="12" md="5">
-      <v-card class="pa-4">
+      <v-card class="pa-4 h-100">
         <span class="text-label">Participants per host</span>
+        <!-- Taller than the default 280 by the chip row under the score chart, so the charts line up. -->
         <AppChart
+          :height="314"
           :options="participantOptions"
           :series="participantSeries"
           label="Bar chart of participants per host. The table below has the same data."
