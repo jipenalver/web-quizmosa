@@ -49,7 +49,7 @@ export function useHostControlView() {
   })
 
   const session = sessionQuery.data
-  const isPretest = computed(() => session.value?.questionnaires?.kind === 'pretest')
+  const isPretest = computed(() => session.value?.kind === 'pretest')
   const questions = computed(() => questionsQuery.data.value ?? [])
   const reportQuestions = computed(() => reportQuery.data.value?.questions ?? [])
 

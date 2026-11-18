@@ -29,7 +29,7 @@ export function useBigScreenView() {
   )
   const currentQuestion = computed(() => questions.value[currentIndex.value] ?? null)
 
-  const isPretest = computed(() => session.value?.questionnaires?.kind === 'pretest')
+  const isPretest = computed(() => session.value?.kind === 'pretest')
 
   const countsQuery = useAnswerCountsQuery(sessionId, () => currentQuestion.value?.id ?? null)
 

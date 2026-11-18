@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
 import { formatDate } from '@/utils/helpers/dates'
 import QuestionnaireFormDialog from './partials/QuestionnaireFormDialog.vue'
@@ -55,7 +54,6 @@ const isNoticeOpen = computed({
           <thead>
             <tr>
               <th>Name</th>
-              <th>Kind</th>
               <th class="text-right">Questions</th>
               <th class="text-right">Seconds</th>
               <th class="text-right">Hosts</th>
@@ -73,7 +71,6 @@ const isNoticeOpen = computed({
                   {{ questionnaire.name }}
                 </RouterLink>
               </td>
-              <td><KindChip :kind="questionnaire.kind" /></td>
               <td class="text-right">{{ questionnaire.questions[0]?.count ?? 0 }}</td>
               <td class="text-right">{{ questionnaire.seconds_per_question }}</td>
               <td class="text-right">{{ questionnaire.sessions[0]?.count ?? 0 }}</td>

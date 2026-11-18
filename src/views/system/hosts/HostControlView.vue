@@ -71,7 +71,7 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
               {{ session.questionnaires?.name }}
             </h1>
             <div class="d-flex align-center ga-2 mt-1">
-              <KindChip v-if="session.questionnaires" :kind="session.questionnaires.kind" />
+              <KindChip :kind="session.kind" />
               <StatusChip :status="session.status" />
             </div>
           </div>

@@ -2,7 +2,6 @@
 import { RouterLink } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
 import QuestionImage from '@/components/common/QuestionImage.vue'
 import type { QuestionWithKey } from '@/types/questionnaires'
@@ -50,7 +49,6 @@ const choiceText = (question: QuestionWithKey, key: (typeof choiceKeys)[number])
       <div>
         <h1 class="text-headline-medium font-weight-bold">{{ questionnaire?.name }}</h1>
         <div v-if="questionnaire" class="d-flex align-center ga-3 mt-1">
-          <KindChip :kind="questionnaire.kind" />
           <span class="text-body-medium text-muted">
             {{ questionnaire.seconds_per_question }} seconds per question
           </span>

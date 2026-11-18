@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { QuestionnaireKind } from '@/types/common'
+import type { SessionKind } from '@/types/common'
 import { kindColors, kindLabels } from '@/utils/helpers/constants'
 
-defineProps<{ kind: QuestionnaireKind }>()
+defineProps<{ kind: SessionKind }>()
 </script>
 
 <template>

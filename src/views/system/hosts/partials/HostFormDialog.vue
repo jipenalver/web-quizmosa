@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRules } from 'vuetify'
+import { kindOptions } from '@/utils/helpers/constants'
 import { useHostFormDialog } from './useHostFormDialog'
 
 const isOpen = defineModel<boolean>({ required: true })
@@ -9,6 +10,7 @@ const rules = useRules()
 const {
   questionnairesQuery,
   questionnaireId,
+  kind,
   questionnaireOptions,
   formAction,
   refVForm,
@@ -36,7 +38,17 @@ const {
             :loading="questionnairesQuery.isPending.value"
             :rules="[rules.required('Choose a questionnaire')]"
             label="Questionnaire"
+            class="mb-2"
             no-data-text="No questionnaires with questions yet"
+          ></v-select>
+
+          <v-select
+            v-model="kind"
+            :items="kindOptions"
+            :rules="[rules.required('Choose a kind')]"
+            hint="Pre-tests are self-paced. Post-tests are run question by question."
+            label="Kind"
+            persistent-hint
           ></v-select>
         </v-card-text>
 

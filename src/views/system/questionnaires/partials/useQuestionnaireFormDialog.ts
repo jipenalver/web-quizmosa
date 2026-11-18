@@ -1,7 +1,6 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import type { VForm } from 'vuetify/components'
 import { useSaveQuestionnaire } from '@/stores/questionnaires'
-import type { QuestionnaireKind } from '@/types/common'
 import type { QuestionnaireWithCounts } from '@/types/questionnaires'
 import { formActionDefault } from '@/utils/helpers/constants'
 import { handleFormError } from '@/utils/helpers/forms'
@@ -15,7 +14,6 @@ export function useQuestionnaireFormDialog(
   // States
   const formDataDefault = {
     name: '',
-    kind: 'standard' as QuestionnaireKind,
     seconds: '20',
   }
   const formData = ref({ ...formDataDefault })
@@ -23,8 +21,6 @@ export function useQuestionnaireFormDialog(
   const refVForm = ref<VForm | null>(null)
 
   const isEditing = computed(() => questionnaire() !== null)
-  // The database also blocks this, so past history keeps its kind.
-  const isKindLocked = computed(() => (questionnaire()?.sessions[0]?.count ?? 0) > 0)
 
   watch(isOpen, (open) => {
     if (!open) return
@@ -34,7 +30,6 @@ export function useQuestionnaireFormDialog(
     formData.value = current
       ? {
           name: current.name,
-          kind: current.kind,
           seconds: String(current.seconds_per_question),
         }
       : { ...formDataDefault }
@@ -48,7 +43,6 @@ export function useQuestionnaireFormDialog(
       await saveQuestionnaire.mutateAsync({
         id: questionnaire()?.id ?? null,
         name: formData.value.name.trim(),
-        kind: formData.value.kind,
         seconds_per_question: Number(formData.value.seconds),
       })
       isOpen.value = false
@@ -72,5 +66,5 @@ export function useQuestionnaireFormDialog(
   }
 
   // Expose State and Actions
-  return { formData, formAction, refVForm, isEditing, isKindLocked, onFormSubmit }
+  return { formData, formAction, refVForm, isEditing, onFormSubmit }
 }

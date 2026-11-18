@@ -55,7 +55,7 @@ const isFormOpen = ref(false)
               </td>
               <td>{{ session.questionnaires?.name }}</td>
               <td>
-                <KindChip v-if="session.questionnaires" :kind="session.questionnaires.kind" />
+                <KindChip :kind="session.kind" />
               </td>
               <td><StatusChip :status="session.status" /></td>
               <td class="text-right">{{ session.participants[0]?.count ?? 0 }}</td>

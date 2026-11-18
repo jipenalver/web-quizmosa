@@ -3,7 +3,8 @@ import { useRouter } from 'vue-router'
 import type { VForm } from 'vuetify/components'
 import { useQuestionnairesQuery } from '@/stores/questionnaires'
 import { useCreateSession } from '@/stores/sessions'
-import { formActionDefault, kindLabels } from '@/utils/helpers/constants'
+import type { SessionKind } from '@/types/common'
+import { formActionDefault } from '@/utils/helpers/constants'
 import { handleFormError } from '@/utils/helpers/forms'
 
 export function useHostFormDialog(isOpen: Ref<boolean>) {
@@ -14,6 +15,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
 
   // States
   const questionnaireId = ref<number | null>(null)
+  const kind = ref<SessionKind | null>(null)
   const formAction = ref({ ...formActionDefault })
   const refVForm = ref<VForm | null>(null)
 
@@ -22,7 +24,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
     (questionnairesQuery.data.value ?? [])
       .filter((questionnaire) => (questionnaire.questions[0]?.count ?? 0) > 0)
       .map((questionnaire) => ({
-        title: `${questionnaire.name} (${kindLabels[questionnaire.kind]})`,
+        title: questionnaire.name,
         value: questionnaire.id,
       })),
   )
@@ -31,17 +33,21 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
     if (!open) return
 
     questionnaireId.value = null
+    kind.value = null
     formAction.value = { ...formActionDefault }
   })
 
   // Actions
   const onSubmit = async () => {
-    if (questionnaireId.value === null) return
+    if (questionnaireId.value === null || kind.value === null) return
 
     formAction.value = { ...formActionDefault, formProcess: true }
 
     try {
-      const id = await createSession.mutateAsync(questionnaireId.value)
+      const id = await createSession.mutateAsync({
+        questionnaireId: questionnaireId.value,
+        kind: kind.value,
+      })
       isOpen.value = false
       router.push({ name: 'HostControl', params: { id } })
     } catch (error) {
@@ -67,6 +73,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
   return {
     questionnairesQuery,
     questionnaireId,
+    kind,
     questionnaireOptions,
     formAction,
     refVForm,

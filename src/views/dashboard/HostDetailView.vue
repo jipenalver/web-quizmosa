@@ -65,7 +65,7 @@ const responseSeries = computed(() => [
     <div v-if="session" class="mt-2 mb-6">
       <h1 class="text-headline-medium font-weight-bold">{{ session.questionnaires?.name }}</h1>
       <div class="d-flex align-center ga-3 mt-1">
-        <KindChip v-if="session.questionnaires" :kind="session.questionnaires.kind" />
+        <KindChip :kind="session.kind" />
         <span v-if="session.ended_at" class="text-body-medium text-muted">
           {{ formatDate(session.ended_at) }}
         </span>

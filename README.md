@@ -12,7 +12,7 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 
 **For admins** (email and password)
 
-- Build questionnaires of kind standard, pre-test or post-test, with images, 2 to 4 choices, points, per-question time limits and drag-to-reorder
+- Build questionnaires with images, 2 to 4 choices, points, per-question time limits and drag-to-reorder, then host each one as a pre-test or post-test
 - Import questions from JSON, with a per-row preview and a downloadable sample
 - Host a live quiz with a join code and QR, and control it: start, next question, reveal, finish, kick
 - Show a live leaderboard and a fullscreen big-screen mode for a projector
