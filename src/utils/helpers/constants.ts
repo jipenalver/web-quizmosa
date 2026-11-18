@@ -46,8 +46,9 @@ export const statusColors = {
   finished: undefined,
 } as const
 
-// Validated for colorblind separation and contrast against each mode's surface.
-export const kindChartColors = {
-  light: { standard: '#E0441D', pretest: '#2F6DB5', posttest: '#1F8A70' },
-  dark: { standard: '#E0441D', pretest: '#5D8CDB', posttest: '#27A07A' },
+// The first three were validated for colorblind separation and contrast against each mode's
+// surface; the last three were not. Colors repeat past six questionnaires.
+export const questionnaireChartColors = {
+  light: ['#E0441D', '#2F6DB5', '#1F8A70', '#8A4FB0', '#B07A1F', '#5B5C66'],
+  dark: ['#E0441D', '#5D8CDB', '#27A07A', '#B07FD6', '#D9A441', '#B9BAC2'],
 } as const

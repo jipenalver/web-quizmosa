@@ -3,34 +3,38 @@ import { computed } from 'vue'
 import type { ApexOptions } from 'apexcharts'
 import { useTheme } from 'vuetify'
 import AppChart from '@/components/common/AppChart.vue'
-import type { QuestionnaireKind } from '@/types/common'
 import type { HistoryRow } from '@/types/dashboard'
 import { countAxis } from '@/utils/helpers/charts'
-import { kindChartColors, kindLabels } from '@/utils/helpers/constants'
+import { questionnaireChartColors } from '@/utils/helpers/constants'
 import { formatDate } from '@/utils/helpers/dates'
 
 const props = defineProps<{ rows: HistoryRow[] }>()
 
 const theme = useTheme()
 
-const kinds: QuestionnaireKind[] = ['standard', 'pretest', 'posttest']
-
-const palette = computed(() => kindChartColors[theme.global.current.value.dark ? 'dark' : 'light'])
+const palette = computed(
+  () => questionnaireChartColors[theme.global.current.value.dark ? 'dark' : 'light'],
+)
 
 const oldestFirst = computed(() => [...props.rows].reverse())
 
-// All three series always exist, so a kind keeps its color when a filter empties another.
+// One line per questionnaire, keyed by id because names are not unique.
+const questionnaires = computed(() => [
+  ...new Map(oldestFirst.value.map((row) => [row.questionnaire_id, row.questionnaire_name])),
+])
+
 const scoreSeries = computed(() =>
-  kinds.map((kind) => ({
-    name: kindLabels[kind],
+  questionnaires.value.map(([id, name]) => ({
+    name,
     data: oldestFirst.value
-      .filter((row) => row.kind === kind)
+      .filter((row) => row.questionnaire_id === id)
       .map((row) => ({ x: new Date(row.ended_at).getTime(), y: row.average_score })),
   })),
 )
 
 const scoreOptions = computed<ApexOptions>(() => ({
-  colors: kinds.map((kind) => palette.value[kind]),
+  // Color from the id, so a questionnaire keeps its color when a filter hides others.
+  colors: questionnaires.value.map(([id]) => palette.value[id % palette.value.length]!),
   stroke: { curve: 'straight', width: 2 },
   markers: { size: 5, strokeWidth: 2, hover: { size: 7 } },
   xaxis: { type: 'datetime', labels: { datetimeUTC: false } },
@@ -50,7 +54,7 @@ const participantSeries = computed(() => [
 ])
 
 const participantOptions = computed<ApexOptions>(() => ({
-  colors: [palette.value.standard],
+  colors: [palette.value[0]],
   plotOptions: {
     bar: { borderRadius: 4, borderRadiusApplication: 'end', columnWidth: '50%' },
   },
@@ -68,7 +72,7 @@ const participantOptions = computed<ApexOptions>(() => ({
         <AppChart
           :options="scoreOptions"
           :series="scoreSeries"
-          label="Line chart of average score per host over time, one line per kind. The table below has the same data."
+          label="Line chart of average score per host over time, one line per questionnaire. The table below has the same data."
           type="line"
         />
       </v-card>

@@ -377,6 +377,7 @@ export type Database = {
           ended_at: string
           kind: Database['public']['Enums']['questionnaire_kind']
           participant_count: number
+          questionnaire_id: number
           questionnaire_name: string
           session_id: number
           started_at: string
