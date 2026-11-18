@@ -16,7 +16,9 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 - Import questions from JSON, with a per-row preview and a downloadable sample
 - Host a live quiz with a join code and QR, and control it: start, next question, reveal, finish, kick
 - Show a live leaderboard and a fullscreen big-screen mode for a projector
-- Review history with charts, per-host reports and a participant list
+- Compare each questionnaire's pre-test and post-test average scores side by side in history
+- Open a per-host report with score, accuracy and response-time charts, and a sortable question table that shows each question's choices and correct answer. Export it as a PDF (light theme) from the browser's print dialog
+- Browse every participant across hosts, sorted by score with the faster player first on ties
 
 **For quizzers** (no account)
 
@@ -63,6 +65,9 @@ Run these in the Supabase SQL Editor, in this order:
 4. `supabase/migrations/20261107000003_storage_questions.sql`
 5. `supabase/migrations/20261107000004_participants_full_name.sql`
 6. `supabase/migrations/20261111000005_self_paced_pretest.sql`
+7. `supabase/migrations/20261118000006_history_questionnaire_id.sql`
+8. `supabase/migrations/20261118000007_session_kind.sql` (moves kind from the questionnaire to the host and removes Standard)
+9. `supabase/migrations/20261118000008_participants_correct_ms.sql`
 
 Create a storage bucket named `questions` before you run step 4. The migration makes it private, so images are served through signed URLs.
 
