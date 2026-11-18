@@ -3,7 +3,12 @@ import { useQuery } from '@tanstack/vue-query'
 import { supabase } from '@/utils/supabase'
 import { sessionKeys } from './sessions'
 import type { ChoiceKey } from '@/types/common'
-import type { HistoryRow, LeaderboardRow, ParticipantOverviewRow } from '@/types/dashboard'
+import type {
+  ComparisonRow,
+  HistoryRow,
+  LeaderboardRow,
+  ParticipantOverviewRow,
+} from '@/types/dashboard'
 
 export function useLeaderboardQuery(sessionId: number) {
   return useQuery({
@@ -62,6 +67,20 @@ export function useParticipantsOverviewQuery() {
       const { data, error } = await supabase.rpc('get_participants_overview')
       if (error) throw error
       return data
+    },
+  })
+}
+
+export function useQuestionnaireComparisonQuery(questionnaireId: number) {
+  return useQuery({
+    queryKey: ['questionnaire-comparison', questionnaireId],
+    staleTime: 0,
+    queryFn: async (): Promise<ComparisonRow[]> => {
+      const { data, error } = await supabase.rpc('get_questionnaire_comparison', {
+        p_questionnaire_id: questionnaireId,
+      })
+      if (error) throw error
+      return data as unknown as ComparisonRow[]
     },
   })
 }

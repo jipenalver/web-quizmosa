@@ -20,6 +20,12 @@ export const systemRoutes: RouteRecordRaw[] = [
     meta: { title: 'Host results' },
   },
   {
+    path: '/dashboard/questionnaires/:id',
+    name: 'QuestionnaireComparison',
+    component: () => import('@/views/dashboard/QuestionnaireComparisonView.vue'),
+    meta: { title: 'Pre-test vs post-test' },
+  },
+  {
     path: '/questionnaires',
     name: 'Questionnaires',
     component: () => import('@/views/system/questionnaires/QuestionnairesView.vue'),
