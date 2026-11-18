@@ -53,11 +53,12 @@
   }
 }
 
-/* Printing (Export PDF on a host report): only the page content, without the app chrome. */
+/* Printing (Export PDF on report pages): only the page content, without the app chrome. */
 @media print {
   .v-app-bar,
   .v-navigation-drawer,
-  .v-footer {
+  .v-footer,
+  .v-data-table-footer {
     display: none;
   }
 
@@ -68,5 +69,24 @@
   .v-card,
   .v-data-table tr {
     break-inside: avoid;
+  }
+}
+
+/* While Export PDF runs, the page narrows to about paper width so charts redraw at print size. */
+.exporting-pdf .v-main .v-container {
+  max-width: 760px;
+}
+
+.exporting-pdf .print-full-width {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media print {
+  /* ApexCharts sizes its canvas with inline pixel styles, so only !important can stretch it. */
+  .apexcharts-canvas,
+  .apexcharts-canvas > svg {
+    height: auto !important;
+    width: 100% !important;
   }
 }

@@ -421,6 +421,20 @@ export type Database = {
           total_correct_ms: number
         }[]
       }
+      get_questionnaire_comparison: {
+        Args: { p_questionnaire_id: number }
+        Returns: {
+          alias: string
+          full_name: string
+          matched_by_name: boolean
+          post_correct_ms: number
+          post_quizzer_id: number
+          post_score: number
+          pre_correct_ms: number
+          pre_quizzer_id: number
+          pre_score: number
+        }[]
+      }
       get_reveal: {
         Args: { p_question_id: number; p_session_id: number }
         Returns: Json

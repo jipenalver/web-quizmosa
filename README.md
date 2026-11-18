@@ -12,19 +12,26 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 
 **For admins** (email and password)
 
-- Build questionnaires with images, 2 to 4 choices, points, per-question time limits and drag-to-reorder, then host each one as a pre-test or post-test
+- Build reusable questionnaires with images, 2 to 4 choices, points and per-question time limits. Reorder questions by dragging, shuffle them, or reset the order
 - Import questions from JSON, with a per-row preview and a downloadable sample
-- Host a live quiz with a join code and QR, and control it: start, next question, reveal, finish, kick
-- Show a live leaderboard and a fullscreen big-screen mode for a projector
-- Compare each questionnaire's pre-test and post-test average scores side by side in history
-- Open a per-host report with score, accuracy and response-time charts, and a sortable question table that shows each question's choices and correct answer. Export it as a PDF (light theme) from the browser's print dialog
-- Browse every participant across hosts, sorted by score with the faster player first on ties
+- Create a host from any questionnaire and choose its kind: a self-paced pre-test or a host-driven post-test. The same questionnaire can run as both, so the two can be compared
+- Run a host with a join code and QR: start, next question, reveal, finish and kick
+- Show a live leaderboard, plus a fullscreen big-screen view for a projector
+- See history with a pre-test vs post-test average score chart per questionnaire and participants per host
+- Open a host report: score, accuracy and response-time charts, and a sortable question table with each question's choices and correct answer
+- Open a questionnaire comparison: every participant's pre-test, post-test, total and gap, with top-3 podiums for the **Best Quizmosa Award** (highest total) and the **Kalamboan Award** (biggest raw point gain)
+- Export the host report and the comparison as a PDF (light theme, charts full width) through the browser's print dialog
+- Browse every participant across hosts. Score sorts break ties by the faster correct-answer time, as on the leaderboard
 
 **For quizzers** (no account)
 
-- Join with a 6-character code or QR, using Supabase anonymous sign-in
+- Join with a 6-character code or QR, using Supabase anonymous sign-in, and enter a full name and optional alias once per browser
 - Answer on a mobile-first screen with a countdown, reveal and final rank
-- Pre-tests are self-paced: each quizzer taps Next on their own timer, and they never show the correct answer, so they don't spoil the post-test
+- Pre-tests are self-paced: each quizzer moves on with their own timer, and the correct answer is never shown, so the post-test isn't spoiled
+
+### Pre-test and post-test matching
+
+The comparison uses each person's latest attempt of each kind, from finished hosts only, without kicked participants. A person is recognized by their anonymous sign-in, so quizzers should use the same device and browser for both tests. If they don't, a pre-test and a post-test are still paired when the full name and alias match (ignoring case and extra spaces) and that name is unique on both sides. Those rows are marked "Matched by name".
 
 ## Tech stack
 
@@ -68,6 +75,7 @@ Run these in the Supabase SQL Editor, in this order:
 7. `supabase/migrations/20261118000006_history_questionnaire_id.sql`
 8. `supabase/migrations/20261118000007_session_kind.sql` (moves kind from the questionnaire to the host and removes Standard)
 9. `supabase/migrations/20261118000008_participants_correct_ms.sql`
+10. `supabase/migrations/20261118000009_questionnaire_comparison.sql`
 
 Create a storage bucket named `questions` before you run step 4. The migration makes it private, so images are served through signed URLs.
 
@@ -84,6 +92,10 @@ The app has no admin sign-up, and clients cannot insert into `hosts`. Create the
 insert into public.hosts (user_id, host_name)
 select id, 'Admin' from auth.users where email = 'admin@example.com';
 ```
+
+## Deployment
+
+The app is a static single-page app. `vercel.json` rewrites every path to `index.html`, so deep links such as `/join/ABC234` work on Vercel. Set the same two `VITE_` variables in the hosting environment.
 
 ## Commands
 

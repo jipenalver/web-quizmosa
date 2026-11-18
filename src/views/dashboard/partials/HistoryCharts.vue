@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ApexOptions } from 'apexcharts'
+import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
 import AppChart from '@/components/common/AppChart.vue'
 import type { SessionKind } from '@/types/common'
@@ -12,6 +13,7 @@ import { formatDate } from '@/utils/helpers/dates'
 const props = defineProps<{ rows: HistoryRow[] }>()
 
 const theme = useTheme()
+const router = useRouter()
 
 const kinds: SessionKind[] = ['pretest', 'posttest']
 
@@ -39,6 +41,18 @@ const scoreSeries = computed(() =>
 )
 
 const scoreOptions = computed<ApexOptions>(() => ({
+  chart: {
+    // Clicking a questionnaire's bars opens its pre-test vs post-test comparison.
+    events: {
+      dataPointSelection: (_event, _chart, options) => {
+        const questionnaire = questionnaires.value[options?.dataPointIndex ?? -1]
+        if (questionnaire) {
+          router.push({ name: 'QuestionnaireComparison', params: { id: questionnaire[0] } })
+        }
+      },
+    },
+  },
+  states: { active: { filter: { type: 'none' } } },
   colors: kinds.map((kind) => palette.value[kind]),
   plotOptions: {
     bar: { borderRadius: 4, borderRadiusApplication: 'end', columnWidth: '60%' },
@@ -73,7 +87,7 @@ const participantOptions = computed<ApexOptions>(() => ({
 <template>
   <v-row>
     <v-col cols="12" md="7">
-      <v-card class="pa-4">
+      <v-card class="pa-4 h-100">
         <span class="text-label">Average score, pre-test vs post-test</span>
         <AppChart
           :options="scoreOptions"
@@ -81,13 +95,27 @@ const participantOptions = computed<ApexOptions>(() => ({
           label="Bar chart of average score per questionnaire, a pre-test bar next to a post-test bar. The table below has the same data."
           type="bar"
         />
+        <div v-if="questionnaires.length > 0" class="d-flex flex-wrap align-center ga-2 mt-2">
+          <span class="text-body-small text-muted">Compare participants:</span>
+          <v-chip
+            v-for="[id, name] in questionnaires"
+            :key="id"
+            :to="{ name: 'QuestionnaireComparison', params: { id } }"
+            size="small"
+            variant="tonal"
+          >
+            {{ name }}
+          </v-chip>
+        </div>
       </v-card>
     </v-col>
 
     <v-col cols="12" md="5">
-      <v-card class="pa-4">
+      <v-card class="pa-4 h-100">
         <span class="text-label">Participants per host</span>
+        <!-- Taller than the default 280 by the chip row under the score chart, so the charts line up. -->
         <AppChart
+          :height="314"
           :options="participantOptions"
           :series="participantSeries"
           label="Bar chart of participants per host. The table below has the same data."
