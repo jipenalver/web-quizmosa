@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick } from 'vue'
 import type { ApexOptions } from 'apexcharts'
 import { RouterLink } from 'vue-router'
+import { useTheme } from 'vuetify'
 import AppChart from '@/components/common/AppChart.vue'
 import KindChip from '@/components/common/KindChip.vue'
 import QueryState from '@/components/common/QueryState.vue'
@@ -16,6 +17,28 @@ const { data: session } = sessionQuery
 const { data: report, isPending, error, refetch } = reportQuery
 
 const questions = computed(() => report.value?.questions ?? [])
+
+const theme = useTheme()
+
+// The browser's print dialog saves the PDF. The report always prints in the light theme,
+// and the document title becomes the suggested file name.
+const onExportPdf = async () => {
+  const previousTheme = theme.global.name.value
+  const previousTitle = document.title
+
+  theme.change('light')
+  document.title = [session.value?.questionnaires?.name, session.value?.join_code]
+    .filter(Boolean)
+    .join(' · ')
+  await nextTick()
+  // Let the charts redraw in the light colors before the page is captured.
+  await new Promise((resolve) => setTimeout(resolve, 300))
+
+  window.print()
+
+  document.title = previousTitle
+  theme.change(previousTheme)
+}
 
 // Report rows with the choices and the correct key, once the questions have loaded.
 const questionRows = computed(() =>
@@ -86,18 +109,30 @@ const responseSeries = computed(() => [
 
 <template>
   <v-container>
-    <RouterLink :to="{ name: 'Dashboard' }" class="text-body-medium text-muted">
+    <RouterLink :to="{ name: 'Dashboard' }" class="text-body-medium text-muted d-print-none">
       Back to dashboard
     </RouterLink>
 
-    <div v-if="session" class="mt-2 mb-6">
-      <h1 class="text-headline-medium font-weight-bold">{{ session.questionnaires?.name }}</h1>
-      <div class="d-flex align-center ga-3 mt-1">
-        <KindChip :kind="session.kind" />
-        <span v-if="session.ended_at" class="text-body-medium text-muted">
-          {{ formatDate(session.ended_at) }}
-        </span>
+    <div v-if="session" class="d-flex flex-wrap align-start justify-space-between ga-4 mt-2 mb-6">
+      <div>
+        <h1 class="text-headline-medium font-weight-bold">{{ session.questionnaires?.name }}</h1>
+        <div class="d-flex align-center ga-3 mt-1">
+          <KindChip :kind="session.kind" />
+          <span v-if="session.ended_at" class="text-body-medium text-muted">
+            {{ formatDate(session.ended_at) }}
+          </span>
+        </div>
       </div>
+
+      <v-btn
+        :disabled="isPending || questions.length === 0"
+        class="d-print-none"
+        prepend-icon="mdi-file-pdf-box"
+        variant="tonal"
+        @click="onExportPdf"
+      >
+        Export PDF
+      </v-btn>
     </div>
 
     <QueryState

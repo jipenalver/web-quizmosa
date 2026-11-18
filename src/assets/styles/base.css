@@ -52,3 +52,21 @@
     transition: none;
   }
 }
+
+/* Printing (Export PDF on a host report): only the page content, without the app chrome. */
+@media print {
+  .v-app-bar,
+  .v-navigation-drawer,
+  .v-footer {
+    display: none;
+  }
+
+  .v-main {
+    padding: 0;
+  }
+
+  .v-card,
+  .v-data-table tr {
+    break-inside: avoid;
+  }
+}
