@@ -113,14 +113,14 @@ const kalamboanWinners = computed(() =>
       @retry="refetch()"
     >
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col class="print-full-width" cols="12" md="6">
           <AwardPodium
             :winners="bestWinners"
             description="Highest pre-test plus post-test score"
             title="Best Quizmosa Award"
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col class="print-full-width" cols="12" md="6">
           <AwardPodium
             :winners="kalamboanWinners"
             description="Biggest gain from pre-test to post-test"

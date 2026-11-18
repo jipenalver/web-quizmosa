@@ -151,7 +151,7 @@ const responseSeries = computed(() => [
       </v-row>
 
       <v-row>
-        <v-col cols="12" md="4">
+        <v-col class="print-full-width" cols="12" md="4">
           <v-card class="pa-4">
             <span class="text-label">Score distribution</span>
             <AppChart
@@ -162,7 +162,7 @@ const responseSeries = computed(() => [
             />
           </v-card>
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col class="print-full-width" cols="12" md="4">
           <v-card class="pa-4">
             <span class="text-label">Accuracy per question</span>
             <AppChart
@@ -173,7 +173,7 @@ const responseSeries = computed(() => [
             />
           </v-card>
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col class="print-full-width" cols="12" md="4">
           <v-card class="pa-4">
             <span class="text-label">Average response time</span>
             <AppChart
