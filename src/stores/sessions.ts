@@ -5,7 +5,12 @@ import { supabase } from '@/utils/supabase'
 import { questionnaireKeys } from './questionnaires'
 import type { SessionKind } from '@/types/common'
 import type { QuestionWithKey } from '@/types/questionnaires'
-import type { HostSession, HostSessionWithCounts, Participant, SessionReport } from '@/types/sessions'
+import type {
+  HostSession,
+  HostSessionWithCounts,
+  Participant,
+  SessionReport,
+} from '@/types/sessions'
 
 export const sessionKeys = {
   all: ['sessions'] as const,
@@ -96,7 +101,13 @@ export function useSessionQuestionsQuery(questionnaireId: MaybeRefOrGetter<numbe
 
 export function useCreateSession() {
   return useMutation({
-    mutationFn: async ({ questionnaireId, kind }: { questionnaireId: number; kind: SessionKind }) => {
+    mutationFn: async ({
+      questionnaireId,
+      kind,
+    }: {
+      questionnaireId: number
+      kind: SessionKind
+    }) => {
       const { data, error } = await supabase.rpc('create_session', {
         p_questionnaire_id: questionnaireId,
         p_kind: kind,
@@ -107,6 +118,23 @@ export function useCreateSession() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: sessionKeys.all })
       queryClient.invalidateQueries({ queryKey: questionnaireKeys.all })
+    },
+  })
+}
+
+// Participants and answers cascade with the host. Quizzer profiles stay.
+export function useDeleteSession() {
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const { error } = await supabase.from('sessions').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: sessionKeys.all })
+      queryClient.invalidateQueries({ queryKey: questionnaireKeys.all })
+      queryClient.invalidateQueries({ queryKey: ['history'] })
+      queryClient.invalidateQueries({ queryKey: ['participants-overview'] })
+      queryClient.invalidateQueries({ queryKey: ['questionnaire-comparison'] })
     },
   })
 }
