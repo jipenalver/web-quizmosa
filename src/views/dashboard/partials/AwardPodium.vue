@@ -63,5 +63,8 @@ const podium = computed(() =>
 .award-block {
   border-radius: 16px 16px 0 0;
   font-size: 1.75rem;
+  /* Browsers drop background colors when printing unless told to keep them. */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 </style>

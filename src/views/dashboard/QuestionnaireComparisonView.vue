@@ -29,25 +29,37 @@ const headers = [
     title: 'Pre-test',
     key: 'pre_score',
     align: 'end' as const,
-    sortRaw: byScoreThenSpeed((row) => row.pre_score, (row) => row.pre_correct_ms),
+    sortRaw: byScoreThenSpeed(
+      (row) => row.pre_score,
+      (row) => row.pre_correct_ms,
+    ),
   },
   {
     title: 'Post-test',
     key: 'post_score',
     align: 'end' as const,
-    sortRaw: byScoreThenSpeed((row) => row.post_score, (row) => row.post_correct_ms),
+    sortRaw: byScoreThenSpeed(
+      (row) => row.post_score,
+      (row) => row.post_correct_ms,
+    ),
   },
   {
     title: 'Total',
     key: 'total',
     align: 'end' as const,
-    sortRaw: byScoreThenSpeed((row) => row.total, (row) => row.totalMs),
+    sortRaw: byScoreThenSpeed(
+      (row) => row.total,
+      (row) => row.totalMs,
+    ),
   },
   {
     title: 'Gap',
     key: 'gap',
     align: 'end' as const,
-    sortRaw: byScoreThenSpeed((row) => row.gap, (row) => row.totalMs),
+    sortRaw: byScoreThenSpeed(
+      (row) => row.gap,
+      (row) => row.totalMs,
+    ),
   },
 ]
 
@@ -63,6 +75,7 @@ const onExportPdf = () =>
   })
 
 const formatGap = (gap: number) => (gap > 0 ? `+${gap}` : String(gap))
+const getGap = (item: unknown) => (item as Row).gap
 
 const bestWinners = computed(() =>
   bestQuizmosa.value.map((row) => ({
@@ -154,8 +167,8 @@ const kalamboanWinners = computed(() =>
           <template #[`item.gap`]="{ item }">
             <span
               :class="{
-                'text-success': item.gap !== null && item.gap > 0,
-                'text-error': item.gap !== null && item.gap < 0,
+                'text-success': getGap(item) !== null && getGap(item)! > 0,
+                'text-error': getGap(item) !== null && getGap(item)! < 0,
               }"
             >
               {{ item.gap === null ? '–' : formatGap(item.gap) }}

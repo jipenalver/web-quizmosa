@@ -16,6 +16,7 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 - Import questions from JSON, with a per-row preview and a downloadable sample
 - Create a host from any questionnaire and choose its kind: a self-paced pre-test or a host-driven post-test. The same questionnaire can run as both, so the two can be compared
 - Run a host with a join code and QR: start, next question, reveal, finish and kick. Reopen a finished pre-test so people who missed it can still take it, without touching anyone's answers
+- Delete a host from the Hosts list when it's in the lobby or finished. Its participants and their answers are deleted with it, and quizzer profiles are kept
 - Show a live leaderboard, plus a fullscreen big-screen view for a projector
 - See history with a pre-test vs post-test average score chart per questionnaire and participants per host
 - Open a host report: score, accuracy and response-time charts, and a sortable question table with each question's choices and correct answer
