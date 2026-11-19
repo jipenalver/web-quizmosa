@@ -15,7 +15,7 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 - Build reusable questionnaires with images, 2 to 4 choices, points and per-question time limits. Reorder questions by dragging, shuffle them, or reset the order
 - Import questions from JSON, with a per-row preview and a downloadable sample
 - Create a host from any questionnaire and choose its kind: a self-paced pre-test or a host-driven post-test. The same questionnaire can run as both, so the two can be compared
-- Run a host with a join code and QR: start, next question, reveal, finish and kick
+- Run a host with a join code and QR: start, next question, reveal, finish and kick. Reopen a finished pre-test so people who missed it can still take it, without touching anyone's answers
 - Show a live leaderboard, plus a fullscreen big-screen view for a projector
 - See history with a pre-test vs post-test average score chart per questionnaire and participants per host
 - Open a host report: score, accuracy and response-time charts, and a sortable question table with each question's choices and correct answer
@@ -76,6 +76,7 @@ Run these in the Supabase SQL Editor, in this order:
 8. `supabase/migrations/20261118000007_session_kind.sql` (moves kind from the questionnaire to the host and removes Standard)
 9. `supabase/migrations/20261118000008_participants_correct_ms.sql`
 10. `supabase/migrations/20261118000009_questionnaire_comparison.sql`
+11. `supabase/migrations/20261119000010_reopen_pretest.sql`
 
 Create a storage bucket named `questions` before you run step 4. The migration makes it private, so images are served through signed URLs.
 

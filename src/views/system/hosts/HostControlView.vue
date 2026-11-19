@@ -33,6 +33,7 @@ const {
   isNoticeOpen,
   onStartNext,
   onOpenPretest,
+  onReopenPretest,
   onReveal,
   onReturnToLobby,
   onConfirmFinish,
@@ -76,14 +77,25 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
             </div>
           </div>
 
-          <v-btn
-            v-if="!isLive"
-            :to="{ name: 'HostDetail', params: { id: session.id } }"
-            color="primary"
-            prepend-icon="mdi-chart-box-outline"
-          >
-            Results
-          </v-btn>
+          <div v-if="!isLive" class="d-flex flex-wrap ga-2">
+            <!-- Lets latecomers take a finished pre-test; finished participants stay as they are. -->
+            <v-btn
+              v-if="isPretest"
+              :loading="isBusy"
+              prepend-icon="mdi-restart"
+              variant="tonal"
+              @click="onReopenPretest"
+            >
+              Reopen
+            </v-btn>
+            <v-btn
+              :to="{ name: 'HostDetail', params: { id: session.id } }"
+              color="primary"
+              prepend-icon="mdi-chart-box-outline"
+            >
+              Results
+            </v-btn>
+          </div>
 
           <div v-if="isLive" class="d-flex flex-wrap ga-2">
             <v-btn
@@ -146,7 +158,11 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
         <v-row>
           <v-col cols="12" md="8">
             <div class="d-flex flex-column ga-4">
-              <JoinPanel v-if="session.status === 'lobby'" :code="session.join_code" />
+              <!-- An open pre-test still takes latecomers, so its code stays visible. -->
+              <JoinPanel
+                v-if="session.status === 'lobby' || (isPretest && session.status === 'question')"
+                :code="session.join_code"
+              />
 
               <QuestionPanel
                 v-if="isInQuestion && currentQuestion"
@@ -170,7 +186,13 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
 
               <v-card v-if="session.status === 'finished'" class="pa-6">
                 <span class="text-label">Finished</span>
-                <p class="text-body-large mt-2">This host has ended.</p>
+                <p class="text-body-large mt-2">
+                  This host has ended.
+                  <template v-if="isPretest">
+                    Reopen it to let people who missed it join with the same code. Everyone who
+                    already finished keeps their answers and cannot retake it.
+                  </template>
+                </p>
               </v-card>
 
               <v-card class="pa-6">
