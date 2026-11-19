@@ -456,6 +456,7 @@ export type Database = {
       my_session_ids: { Args: never; Returns: number[] }
       next_question: { Args: { p_session_id: number }; Returns: undefined }
       open_pretest: { Args: { p_session_id: number }; Returns: undefined }
+      reopen_pretest: { Args: { p_session_id: number }; Returns: undefined }
       reorder_questions: {
         Args: { p_ids: number[]; p_questionnaire_id: number }
         Returns: undefined

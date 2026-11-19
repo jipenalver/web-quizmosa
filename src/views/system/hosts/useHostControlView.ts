@@ -6,6 +6,7 @@ import {
   useKickParticipant,
   useOpenPretest,
   useParticipantsQuery,
+  useReopenPretest,
   useReturnToLobby,
   useRevealQuestion,
   useSessionQuery,
@@ -28,6 +29,7 @@ export function useHostControlView() {
 
   const startQuestion = useStartQuestion(sessionId)
   const openPretest = useOpenPretest(sessionId)
+  const reopenPretest = useReopenPretest(sessionId)
   const revealQuestion = useRevealQuestion(sessionId)
   const finishSession = useFinishSession(sessionId)
   const returnToLobby = useReturnToLobby(sessionId)
@@ -76,6 +78,7 @@ export function useHostControlView() {
     () =>
       startQuestion.isPending.value ||
       openPretest.isPending.value ||
+      reopenPretest.isPending.value ||
       revealQuestion.isPending.value ||
       finishSession.isPending.value ||
       returnToLobby.isPending.value,
@@ -101,6 +104,8 @@ export function useHostControlView() {
   }
 
   const onOpenPretest = () => run(() => openPretest.mutateAsync())
+
+  const onReopenPretest = () => run(() => reopenPretest.mutateAsync())
 
   const onReveal = () => run(() => revealQuestion.mutateAsync())
 
@@ -146,6 +151,7 @@ export function useHostControlView() {
     isNoticeOpen,
     onStartNext,
     onOpenPretest,
+    onReopenPretest,
     onReveal,
     onReturnToLobby,
     onConfirmFinish,

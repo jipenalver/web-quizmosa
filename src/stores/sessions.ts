@@ -139,6 +139,14 @@ export function useOpenPretest(sessionId: number) {
   })
 }
 
+// Pre-test only: a finished one opens again for latecomers. Finished participants stay finished.
+export function useReopenPretest(sessionId: number) {
+  return useSessionControl<void>(sessionId, async () => {
+    const { error } = await supabase.rpc('reopen_pretest', { p_session_id: sessionId })
+    if (error) throw error
+  })
+}
+
 export function useRevealQuestion(sessionId: number) {
   return useSessionControl<void>(sessionId, async () => {
     const { error } = await supabase.rpc('reveal_question', { p_session_id: sessionId })
