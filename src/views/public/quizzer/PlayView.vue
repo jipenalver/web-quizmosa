@@ -79,7 +79,7 @@ const { data: question } = questionQuery
     <EmptyState
       v-else-if="screen === 'ready'"
       text="Go at your own pace. Each question has its own timer."
-      title="The pre-test is open"
+      title="The quiz is open"
     >
       <v-btn :loading="nextQuestion.isPending.value" color="primary" size="large" @click="onNext">
         Start

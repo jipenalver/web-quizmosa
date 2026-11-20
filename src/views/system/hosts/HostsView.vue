@@ -91,7 +91,7 @@ const onConfirmDelete = async () => {
               </td>
               <td>{{ session.questionnaires?.name }}</td>
               <td>
-                <KindChip :kind="session.kind" />
+                <KindChip :kind="session.kind" :self-paced="session.is_self_paced" />
               </td>
               <td><StatusChip :status="session.status" /></td>
               <td class="text-right">{{ session.participants[0]?.count ?? 0 }}</td>

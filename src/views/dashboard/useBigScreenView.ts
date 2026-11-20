@@ -29,7 +29,7 @@ export function useBigScreenView() {
   )
   const currentQuestion = computed(() => questions.value[currentIndex.value] ?? null)
 
-  const isPretest = computed(() => session.value?.kind === 'pretest')
+  const isSelfPaced = computed(() => session.value?.is_self_paced ?? false)
 
   const countsQuery = useAnswerCountsQuery(sessionId, () => currentQuestion.value?.id ?? null)
 
@@ -74,7 +74,7 @@ export function useBigScreenView() {
     questions,
     currentIndex,
     currentQuestion,
-    isPretest,
+    isSelfPaced,
     answeredCount,
     participantCount,
     doneCount,

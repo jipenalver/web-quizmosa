@@ -102,7 +102,7 @@ const responseSeries = computed(() => [
       <div>
         <h1 class="text-headline-medium font-weight-bold">{{ session.questionnaires?.name }}</h1>
         <div class="d-flex align-center ga-3 mt-1">
-          <KindChip :kind="session.kind" />
+          <KindChip :kind="session.kind" :self-paced="session.is_self_paced" />
           <span v-if="session.ended_at" class="text-body-medium text-muted">
             {{ formatDate(session.ended_at) }}
           </span>
@@ -200,7 +200,9 @@ const responseSeries = computed(() => [
               <div
                 v-for="choice in item.choices"
                 :key="choice.key"
-                :class="choice.key === item.correct ? 'text-success font-weight-bold' : 'text-muted'"
+                :class="
+                  choice.key === item.correct ? 'text-success font-weight-bold' : 'text-muted'
+                "
                 class="text-body-medium mt-1"
               >
                 {{ choice.key }}. {{ choice.text }}
