@@ -3,13 +3,13 @@ import { computed } from 'vue'
 
 const props = defineProps<{ selfPaced: boolean }>()
 
-// Worded to hold for every kind: a pre-test never shows the correct answer.
+// Worded to hold for every kind: a self-paced host never shows the correct answer.
 const steps = computed(() =>
   props.selfPaced
     ? [
         {
           title: 'Wait for the host',
-          text: 'A Start button appears here when the host opens the pre-test.',
+          text: 'A Start button appears here when the host opens the quiz.',
         },
         {
           title: 'Tap your answer',
@@ -21,7 +21,7 @@ const steps = computed(() =>
         },
         {
           title: 'See your rank',
-          text: 'Your rank shows when the host finishes the pre-test.',
+          text: 'Your rank shows when the host finishes the quiz.',
         },
       ]
     : [

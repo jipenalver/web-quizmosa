@@ -104,13 +104,16 @@ export function useCreateSession() {
     mutationFn: async ({
       questionnaireId,
       kind,
+      selfPaced,
     }: {
       questionnaireId: number
       kind: SessionKind
+      selfPaced: boolean
     }) => {
       const { data, error } = await supabase.rpc('create_session', {
         p_questionnaire_id: questionnaireId,
         p_kind: kind,
+        p_self_paced: selfPaced,
       })
       if (error) throw error
       return data
@@ -159,7 +162,7 @@ export function useStartQuestion(sessionId: number) {
   })
 }
 
-// Pre-test only: opens it once, then each quizzer goes at their own pace.
+// Self-paced hosts only: opens it once, then each quizzer goes at their own pace.
 export function useOpenPretest(sessionId: number) {
   return useSessionControl<void>(sessionId, async () => {
     const { error } = await supabase.rpc('open_pretest', { p_session_id: sessionId })
@@ -167,7 +170,7 @@ export function useOpenPretest(sessionId: number) {
   })
 }
 
-// Pre-test only: a finished one opens again for latecomers. Finished participants stay finished.
+// Self-paced hosts only: a finished one opens again for latecomers. Finished participants stay finished.
 export function useReopenPretest(sessionId: number) {
   return useSessionControl<void>(sessionId, async () => {
     const { error } = await supabase.rpc('reopen_pretest', { p_session_id: sessionId })

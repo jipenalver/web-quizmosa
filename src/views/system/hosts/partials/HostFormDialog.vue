@@ -11,6 +11,7 @@ const {
   questionnairesQuery,
   questionnaireId,
   kind,
+  selfPaced,
   questionnaireOptions,
   formAction,
   refVForm,
@@ -46,10 +47,24 @@ const {
             v-model="kind"
             :items="kindOptions"
             :rules="[rules.required('Choose a kind')]"
-            hint="Pre-tests are self-paced. Post-tests are run question by question."
+            hint="Pre-tests are always self-paced."
             label="Kind"
             persistent-hint
           ></v-select>
+
+          <v-switch
+            v-if="kind === 'posttest'"
+            v-model="selfPaced"
+            :hint="
+              selfPaced
+                ? 'Everyone goes at their own pace. The correct answer is never shown.'
+                : 'You run it question by question and reveal each answer.'
+            "
+            class="mt-4"
+            color="primary"
+            label="Self-paced"
+            persistent-hint
+          ></v-switch>
         </v-card-text>
 
         <v-card-actions>

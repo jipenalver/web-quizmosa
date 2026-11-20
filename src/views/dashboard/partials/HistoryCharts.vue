@@ -27,15 +27,17 @@ const questionnaires = computed(() => [
 ])
 
 // Both series always exist, so a kind keeps its color when a filter empties the other.
-// A questionnaire hosted more than once as the same kind shows the mean of those hosts.
+// A questionnaire hosted more than once as the same kind shows the mean over everyone in those
+// hosts, so a small latecomer host does not count as much as a full room.
 const scoreSeries = computed(() =>
   kinds.map((kind) => ({
     name: kindLabels[kind],
     data: questionnaires.value.map(([id]) => {
-      const scores = props.rows
-        .filter((row) => row.questionnaire_id === id && row.kind === kind)
-        .map((row) => row.average_score)
-      return scores.length ? scores.reduce((sum, score) => sum + score, 0) / scores.length : null
+      const hosts = props.rows.filter((row) => row.questionnaire_id === id && row.kind === kind)
+      if (hosts.length === 0) return null
+      const people = hosts.reduce((sum, row) => sum + row.participant_count, 0)
+      const points = hosts.reduce((sum, row) => sum + row.average_score * row.participant_count, 0)
+      return people > 0 ? Number((points / people).toFixed(1)) : 0
     }),
   })),
 )

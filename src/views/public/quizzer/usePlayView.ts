@@ -35,10 +35,10 @@ export function usePlayView() {
   const session = sessionQuery.data
   const status = computed(() => session.value?.status)
 
-  // A pre-test is self-paced: each quizzer has their own question and timer.
+  // A self-paced host: each quizzer has their own question and timer.
   const progressQuery = useMyProgressQuery(code, sessionId)
   const progress = progressQuery.data
-  const isSelfPaced = computed(() => progress.value?.kind === 'pretest')
+  const isSelfPaced = computed(() => progress.value?.self_paced ?? false)
 
   const questionId = computed(() =>
     isSelfPaced.value

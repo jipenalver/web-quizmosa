@@ -16,7 +16,7 @@ const {
   finishSession,
   kickParticipant,
   session,
-  isPretest,
+  isSelfPaced,
   questions,
   activeParticipants,
   currentIndex,
@@ -49,7 +49,7 @@ const isInQuestion = computed(
 )
 
 // Matches the server, which only hands out questions that have a correct answer.
-const pretestTotal = computed(() => questions.value.filter((q) => q.question_keys).length)
+const selfPacedTotal = computed(() => questions.value.filter((q) => q.question_keys).length)
 </script>
 
 <template>
@@ -72,15 +72,15 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
               {{ session.questionnaires?.name }}
             </h1>
             <div class="d-flex align-center ga-2 mt-1">
-              <KindChip :kind="session.kind" />
+              <KindChip :kind="session.kind" :self-paced="session.is_self_paced" />
               <StatusChip :status="session.status" />
             </div>
           </div>
 
           <div v-if="!isLive" class="d-flex flex-wrap ga-2">
-            <!-- Lets latecomers take a finished pre-test; finished participants stay as they are. -->
+            <!-- Lets latecomers take a finished self-paced host; finished participants stay as they are. -->
             <v-btn
-              v-if="isPretest"
+              v-if="isSelfPaced"
               :loading="isBusy"
               prepend-icon="mdi-restart"
               variant="tonal"
@@ -106,7 +106,7 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
               Leaderboard
             </v-btn>
             <v-btn
-              v-if="isInQuestion && !isPretest"
+              v-if="isInQuestion && !isSelfPaced"
               :disabled="isBusy"
               prepend-icon="mdi-keyboard-return"
               variant="text"
@@ -122,8 +122,8 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
             >
               Finish
             </v-btn>
-            <!-- A pre-test only has Start; quizzers move through it themselves. -->
-            <template v-if="isPretest">
+            <!-- A self-paced host only has Start; quizzers move through it themselves. -->
+            <template v-if="isSelfPaced">
               <v-btn
                 v-if="session.status === 'lobby'"
                 :loading="isBusy"
@@ -158,9 +158,9 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
         <v-row>
           <v-col cols="12" md="8">
             <div class="d-flex flex-column ga-4">
-              <!-- An open pre-test still takes latecomers, so its code stays visible. -->
+              <!-- An open self-paced host still takes latecomers, so its code stays visible. -->
               <JoinPanel
-                v-if="session.status === 'lobby' || (isPretest && session.status === 'question')"
+                v-if="session.status === 'lobby' || (isSelfPaced && session.status === 'question')"
                 :code="session.join_code"
               />
 
@@ -176,8 +176,8 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
                 :total="questions.length"
               />
 
-              <v-card v-if="isPretest && session.status === 'question'" class="pa-6">
-                <span class="text-label">Pre-test open</span>
+              <v-card v-if="isSelfPaced && session.status === 'question'" class="pa-6">
+                <span class="text-label">Self-paced and open</span>
                 <p class="text-body-large mt-2">
                   Quizzers go at their own pace. Progress shows next to each name. Finish when
                   everyone is done.
@@ -188,7 +188,7 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
                 <span class="text-label">Finished</span>
                 <p class="text-body-large mt-2">
                   This host has ended.
-                  <template v-if="isPretest">
+                  <template v-if="isSelfPaced">
                     Reopen it to let people who missed it join with the same code. Everyone who
                     already finished keeps their answers and cannot retake it.
                   </template>
@@ -217,7 +217,7 @@ const pretestTotal = computed(() => questions.value.filter((q) => q.question_key
               :error="participantsQuery.error.value"
               :loading="participantsQuery.isPending.value"
               :participants="participantsQuery.data.value ?? []"
-              :progress-total="isPretest ? pretestTotal : undefined"
+              :progress-total="isSelfPaced ? selfPacedTotal : undefined"
               @kick="onAskKick"
               @retry="participantsQuery.refetch()"
             />

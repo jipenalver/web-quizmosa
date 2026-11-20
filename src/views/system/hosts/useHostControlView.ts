@@ -51,7 +51,7 @@ export function useHostControlView() {
   })
 
   const session = sessionQuery.data
-  const isPretest = computed(() => session.value?.kind === 'pretest')
+  const isSelfPaced = computed(() => session.value?.is_self_paced ?? false)
   const questions = computed(() => questionsQuery.data.value ?? [])
   const reportQuestions = computed(() => reportQuery.data.value?.questions ?? [])
 
@@ -134,7 +134,7 @@ export function useHostControlView() {
     finishSession,
     kickParticipant,
     session,
-    isPretest,
+    isSelfPaced,
     questions,
     activeParticipants,
     currentIndex,

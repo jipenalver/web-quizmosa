@@ -8,7 +8,7 @@ const props = defineProps<{
   loading: boolean
   error: unknown
   canKick: boolean
-  // Set on a pre-test, where each quizzer moves at their own pace.
+  // Set on a self-paced host, where each quizzer moves at their own pace.
   progressTotal?: number
 }>()
 

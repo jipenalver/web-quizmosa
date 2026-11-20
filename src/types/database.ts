@@ -290,6 +290,7 @@ export type Database = {
           ended_at: string | null
           host_id: number
           id: number
+          is_self_paced: boolean
           join_code: string
           kind: Database['public']['Enums']['session_kind']
           question_ends_at: string | null
@@ -304,6 +305,7 @@ export type Database = {
           ended_at?: string | null
           host_id: number
           id?: never
+          is_self_paced?: boolean
           join_code: string
           kind: Database['public']['Enums']['session_kind']
           question_ends_at?: string | null
@@ -318,6 +320,7 @@ export type Database = {
           ended_at?: string | null
           host_id?: number
           id?: never
+          is_self_paced?: boolean
           join_code?: string
           kind?: Database['public']['Enums']['session_kind']
           question_ends_at?: string | null
@@ -371,6 +374,7 @@ export type Database = {
         Args: {
           p_kind: Database['public']['Enums']['session_kind']
           p_questionnaire_id: number
+          p_self_paced?: boolean
         }
         Returns: number
       }

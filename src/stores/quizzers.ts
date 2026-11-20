@@ -103,7 +103,7 @@ export function useMyProgressQuery(code: string, sessionId: Ref<number | undefin
   })
 }
 
-// Pre-test only: the server hands out the next question and starts this quizzer's timer.
+// Self-paced hosts only: the server hands out the next question and starts this quizzer's timer.
 export function useNextQuestion(code: string) {
   return useMutation({
     mutationFn: async (sessionId: number) => {

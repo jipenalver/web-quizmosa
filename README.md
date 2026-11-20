@@ -14,8 +14,8 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 
 - Build reusable questionnaires with images, 2 to 4 choices, points and per-question time limits. Reorder questions by dragging, shuffle them, or reset the order
 - Import questions from JSON, with a per-row preview and a downloadable sample
-- Create a host from any questionnaire and choose its kind: a self-paced pre-test or a host-driven post-test. The same questionnaire can run as both, so the two can be compared
-- Run a host with a join code and QR: start, next question, reveal, finish and kick. Reopen a finished pre-test so people who missed it can still take it, without touching anyone's answers
+- Create a host from any questionnaire and choose its kind: a self-paced pre-test, or a post-test that you run question by question or set to self-paced. The same questionnaire can run as both, so the two can be compared
+- Run a host with a join code and QR: start, next question, reveal, finish and kick. Reopen a finished self-paced host (pre-test or self-paced post-test) so people who missed it can still take it, without touching anyone's answers
 - Delete a host from the Hosts list when it's in the lobby or finished. Its participants and their answers are deleted with it, and quizzer profiles are kept
 - Show a live leaderboard, plus a fullscreen big-screen view for a projector
 - See history with a pre-test vs post-test average score chart per questionnaire and participants per host
@@ -28,7 +28,7 @@ The name comes from the Filipino word _chismosa_ (gossiper).
 
 - Join with a 6-character code or QR, using Supabase anonymous sign-in, and enter a full name and optional alias once per browser
 - Answer on a mobile-first screen with a countdown, reveal and final rank
-- Pre-tests are self-paced: each quizzer moves on with their own timer, and the correct answer is never shown, so the post-test isn't spoiled
+- Self-paced hosts (every pre-test, and post-tests set to self-paced): each quizzer moves on with their own timer, and the correct answer is never shown, so nobody can pass it on
 
 ### Pre-test and post-test matching
 
@@ -78,6 +78,7 @@ Run these in the Supabase SQL Editor, in this order:
 9. `supabase/migrations/20261118000008_participants_correct_ms.sql`
 10. `supabase/migrations/20261118000009_questionnaire_comparison.sql`
 11. `supabase/migrations/20261119000010_reopen_pretest.sql`
+12. `supabase/migrations/20261120000011_self_paced_posttest.sql` (self-paced post-tests)
 
 Create a storage bucket named `questions` before you run step 4. The migration makes it private, so images are served through signed URLs.
 

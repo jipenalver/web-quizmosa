@@ -24,9 +24,10 @@ export type PlayReveal = {
   } | null
   counts?: Record<string, number>
 }
-// From get_my_progress. Only a pre-test uses the per-participant question and timer.
+// From get_my_progress. Only a self-paced host uses the per-participant question and timer.
 export type PlayProgress = {
   kind: SessionKind
+  self_paced: boolean
   question_id: number | null
   question_started_at: string | null
   question_ends_at: string | null

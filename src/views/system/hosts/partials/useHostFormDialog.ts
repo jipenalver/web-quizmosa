@@ -16,6 +16,8 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
   // States
   const questionnaireId = ref<number | null>(null)
   const kind = ref<SessionKind | null>(null)
+  // Post-tests only. Pre-tests are always self-paced, which the server enforces.
+  const selfPaced = ref(false)
   const formAction = ref({ ...formActionDefault })
   const refVForm = ref<VForm | null>(null)
 
@@ -34,6 +36,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
 
     questionnaireId.value = null
     kind.value = null
+    selfPaced.value = false
     formAction.value = { ...formActionDefault }
   })
 
@@ -47,6 +50,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
       const id = await createSession.mutateAsync({
         questionnaireId: questionnaireId.value,
         kind: kind.value,
+        selfPaced: kind.value === 'posttest' && selfPaced.value,
       })
       isOpen.value = false
       router.push({ name: 'HostControl', params: { id } })
@@ -74,6 +78,7 @@ export function useHostFormDialog(isOpen: Ref<boolean>) {
     questionnairesQuery,
     questionnaireId,
     kind,
+    selfPaced,
     questionnaireOptions,
     formAction,
     refVForm,

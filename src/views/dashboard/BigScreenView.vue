@@ -18,7 +18,7 @@ const {
   questions,
   currentIndex,
   currentQuestion,
-  isPretest,
+  isSelfPaced,
   answeredCount,
   participantCount,
   doneCount,
@@ -69,9 +69,9 @@ const choices = computed(() =>
           <QrCode :size="360" :value="joinUrl" />
         </div>
 
-        <!-- A self-paced pre-test has no shared question, so the room sees live points. -->
-        <div v-else-if="session.status === 'question' && isPretest" class="flex-grow-1">
-          <span class="text-label">Pre-test in progress</span>
+        <!-- A self-paced host has no shared question, so the room sees live points. -->
+        <div v-else-if="session.status === 'question' && isSelfPaced" class="flex-grow-1">
+          <span class="text-label">Quiz in progress</span>
           <h1 class="big-prompt font-weight-bold mt-2">Answer on your phone</h1>
           <p class="big-text mt-4">{{ doneCount }} of {{ participantCount }} done</p>
 
@@ -127,8 +127,8 @@ const choices = computed(() =>
             >
             <h1 class="big-prompt font-weight-bold mt-2 mb-8">{{ currentQuestion.prompt }}</h1>
 
-            <!-- A pre-test never shows the key or the counts, so it cannot spoil the post-test. -->
-            <p v-if="isPretest" class="big-text">Answers are in.</p>
+            <!-- A self-paced host never shows the key or the counts, so nobody can pass them on. -->
+            <p v-if="isSelfPaced" class="big-text">Answers are in.</p>
             <BigScreenDistribution
               v-else
               :choices="choices"
