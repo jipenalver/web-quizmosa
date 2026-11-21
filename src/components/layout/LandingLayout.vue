@@ -15,6 +15,8 @@ const route = useRoute()
 
     <v-spacer></v-spacer>
 
+    <v-btn v-if="route.name !== 'Login'" :to="{ name: 'Login' }" variant="text">Admin login</v-btn>
+
     <ThemeToggle class="mr-2" />
   </v-app-bar>
 
