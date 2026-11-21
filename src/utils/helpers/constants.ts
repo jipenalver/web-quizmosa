@@ -49,3 +49,6 @@ export const kindChartColors = {
   light: { pretest: '#2F6DB5', posttest: '#1F8A70' },
   dark: { pretest: '#5D8CDB', posttest: '#27A07A' },
 } as const
+
+export const contactEmailPrimary = 'jianchris2k14@gmail.com'
+export const contactEmailSecondary = 'jabez.penalver@butuan.gov.ph'
